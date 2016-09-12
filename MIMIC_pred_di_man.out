@@ -1,6 +1,6 @@
 Mplus VERSION 7.1 (Mac)
 MUTHEN & MUTHEN
-08/30/2016  11:42 AM
+09/12/2016   4:55 PM
 
 INPUT INSTRUCTIONS
 
@@ -548,9 +548,9 @@ TP_04_NP WITH TP_02_NP             5.025    -0.040     -0.040       -0.225
 TP_05_NP WITH TP_04_NP            13.219     0.039      0.039        8.310
 
 
-     Beginning Time:  11:42:42
-        Ending Time:  11:42:44
-       Elapsed Time:  00:00:02
+     Beginning Time:  16:55:26
+        Ending Time:  16:55:27
+       Elapsed Time:  00:00:01
 
 
 

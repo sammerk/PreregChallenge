@@ -1,6 +1,6 @@
 Mplus VERSION 7.1 (Mac)
 MUTHEN & MUTHEN
-08/31/2016   1:37 PM
+09/12/2016   4:55 PM
 
 INPUT INSTRUCTIONS
 
@@ -14,15 +14,27 @@ INPUT INSTRUCTIONS
    MISSING=.;
    USEVARIABLES = tp_01_np tp_02_np tp_03_np tp_04_np
                   tp_05_np tp_06_np;
+
                   CLUSTER = IDnum;
   ANALYSIS:
   TYPE = TWOLEVEL;
   MODEL:
   %WITHIN%
-                   TPW BY tp_01_np tp_02_np tp_03_np tp_04_np tp_05_np tp_06_np;
+                   TPW BY tp_01_np
+     	                    tp_02_np
+     	                    tp_03_np
+     	                    tp_04_np
+                          tp_05_np
+                          tp_06_np;
 
-                   %BETWEEN%
-                   TPB BY tp_01_np tp_02_np tp_03_np tp_04_np tp_05_np tp_06_np;
+
+                    %BETWEEN%
+                    TPB BY tp_01_np
+     	                     tp_02_np
+     	                     tp_03_np
+     	                     tp_04_np
+                           tp_05_np
+                           tp_06_np;
   OUTPUT:
   Standardized;
 
@@ -442,8 +454,8 @@ QUALITY OF NUMERICAL RESULTS
        (ratio of smallest to largest eigenvalue)
 
 
-     Beginning Time:  13:37:49
-        Ending Time:  13:37:50
+     Beginning Time:  16:55:16
+        Ending Time:  16:55:17
        Elapsed Time:  00:00:01
 
 

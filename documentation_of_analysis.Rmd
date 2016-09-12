@@ -3,17 +3,17 @@ title: "Documentation of Analyses"
 csl: bib/apa.csl
 date: "25 Juli 2016"
 output:
-  word_document:
-    toc: yes
-    toc_depth: '3'
-  pdf_document:
-    toc: yes
-    toc_depth: '3'
   html_document:
     theme: flatly
     toc: yes
     toc_depth: 3
     toc_float: yes
+  pdf_document:
+    toc: yes
+    toc_depth: '3'
+  word_document:
+    toc: yes
+    toc_depth: '3'
 bibliography: bib/library.bib
 ---
 
@@ -216,8 +216,28 @@ rawdata_long_np$sourcenum <- as.numeric(as.factor(rawdata_long_np$source))  ## C
 # Sample description
 ## Sample size
 ```{r}
+rawdata$not_na <- rowMeans(is.na(rawdata)) # Variable which proportion NA/not NA 
+plot(select(rawdata, -Pseudonym, -Welle, -rawid, -source, -zeit, -kurs)$not_na)     # Variable
 
+# Total sample size
+nrow(rawdata)
+
+# Gender ratio
+nrow(rawdata %>% filter(sex == 2))  # female
+nrow(rawdata %>% filter(sex == 1))  # male
+nrow(rawdata %>% filter(sex == 3))  # other
+
+# Age
+mean(rawdata$age, na.rm = T)
+sd(rawdata$age, na.rm = T)
+
+# semester
+100/sum(!is.na(rawdata$sem))*sum(rawdata$sem <= 2, na.rm = T)                    # Percentage of semester 1 or 2
+100/sum(!is.na(rawdata$sem))*sum(rawdata$sem <= 4 & rawdata$sem > 2, na.rm = T)  # Percentage of semester 3 or 4
 ```
+
+
+## Gender
 
 
 
