@@ -1,0 +1,932 @@
+---
+title: "Documentation of Analyses"
+csl: bib/apa.csl
+date: "25 Juli 2016"
+output:
+  word_document:
+    toc: yes
+    toc_depth: '3'
+  pdf_document:
+    toc: yes
+    toc_depth: '3'
+  html_document:
+    theme: flatly
+    toc: yes
+    toc_depth: 3
+    toc_float: yes
+bibliography: bib/library.bib
+---
+
+# Setup
+The following contains the documentation of all analysis conducted for the manuscript entitled __title title XX__ and submitted to __PLoS One__ at xxxx-xx-xx.  
+We primarily used the free and open source software R [@RCoreTeam2014]. Multilevel confirmatory factor analysis and multilevel structural equation models were estimated with MPlus 7.1 [@Muthen2012] using the R package `MplusAutomation` [@Hallquist2013] as a R leverage.
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(dplyr)
+library(tidyr)
+library(MplusAutomation)
+library(lavaan)
+```
+
+# Datawrangling
+Experimental conditions and rotations of the booklets resulted in 12 different rawdata files. The following code junks descripe their import, joining, recoding and reshaping.
+
+
+## Import 
+```{r import, cache = T}
+raw_erf_r1 <- read.table("data/erf_r1/daten.csv", sep = ";", header = T)
+raw_erf_r2 <- read.table("data/erf_r2/daten.csv", sep = ";", header = T)
+raw_erf_r3 <- read.table("data/erf_r3/daten.csv", sep = ";", header = T)
+raw_erf_r4 <- read.table("data/erf_r4/daten.csv", sep = ";", header = T)
+raw_exp_r1 <- read.table("data/exp_r1/daten.csv", sep = ";", header = T)
+raw_exp_r2 <- read.table("data/exp_r2/daten.csv", sep = ";", header = T)
+raw_exp_r3 <- read.table("data/exp_r3/daten.csv", sep = ";", header = T)
+raw_exp_r4 <- read.table("data/exp_r4/daten.csv", sep = ";", header = T)
+raw_wis_r1 <- read.table("data/wis_r1/daten.csv", sep = ";", header = T)
+raw_wis_r2 <- read.table("data/wis_r2/daten.csv", sep = ";", header = T)
+raw_wis_r3 <- read.table("data/wis_r3/daten.csv", sep = ";", header = T)
+raw_wis_r4 <- read.table("data/wis_r4/daten.csv", sep = ";", header = T)
+```
+
+
+##Joining
+```{r joining, message=F, warning=F, cache = T}
+rawdata <- full_join(raw_erf_r1,
+           full_join(raw_erf_r2,
+           full_join(raw_erf_r3,
+           full_join(raw_erf_r4,
+           full_join(raw_exp_r1,
+           full_join(raw_exp_r2,
+           full_join(raw_exp_r3,
+           full_join(raw_exp_r4,
+           full_join(raw_wis_r1,
+           full_join(raw_wis_r2,
+           full_join(raw_wis_r3, raw_wis_r4)))))))))))
+```
+
+
+## Recoding
+```{r recoding, cache = T}
+#names(rawdata%>%select(ends_with("_ip")))
+
+rawdata <- rawdata%>%
+  mutate(source = as.factor(substr(rawdata$Pseudonym, 1,3)),
+         te_01_np = tx_02_np_t1,              ## CAEB recoding and renaming: te = texture, vr = variability
+         te_02_np = tx_04_np_t1,   
+         te_03_np = 8 - tx_05_ip_t1,
+         te_04_np = tx_06_np_t1, 
+         te_05_np = tx_07_np_t1,     
+         te_06_np = tx_08_np_t1,     
+         te_07_np = tx_09_np_t1,     
+         te_08_np = tx_10_np_t1,         
+         te_09_np = 8 - tx_11_ip_t1,
+         te_10_np = tx_12_np_t1,  
+         
+         vr_01_np = va_01_np_t1, 
+         vr_02_np = 8 - va_02_ip_t1, 
+         vr_03_np = 8 - va_03_ip_t1, 
+         vr_04_np = 8 - va_04_ip_t1, 
+         vr_05_np = va_05_np_t1, 
+         vr_06_np = 8 - tx_13_ip_t1, 
+         vr_07_np = 8 - va_06_ip_t1, 
+         
+         si_03_np = 7 - si_03_ip,                ## Study interest
+         si_04_np = 7 - si_04_ip,
+         si_06_np = 7 - si_06_ip,
+         
+         sk_03_np = 5 - sk_03_ip,                ## Self-Concept
+         
+         
+         ## Worked out examples text
+         dd_we_ie_05_np = 7 - dd_we_ie_05_ip,    ## Interest-Enjoy
+         dd_we_tp_02_np = 5 - dd_we_tp_02_ip,    ## Theory-Praxis-Relation
+         dd_we_tp_04_np =     dd_we_tp_04_ip,
+         dd_we_tp_06_np =     dd_we_tp_06_ip, 
+         dd_we_ko_02_np = 5 - dd_we_ko_02_ip,    ## Koherence
+         dd_we_ko_04_np = 5 - dd_we_ko_04_ip, 
+
+         ## CTM text
+         dd_cm_ie_05_np = 7 - dd_cm_ie_05_ip,    ## Interest-Enjoy
+         dd_cm_tp_02_np = 5 - dd_cm_tp_02_ip,    ## Theory-Praxis-Relation
+         dd_cm_tp_04_np =     dd_cm_tp_04_ip,
+         dd_cm_tp_06_np =     dd_cm_tp_06_ip, 
+         dd_cm_ko_02_np = 5 - dd_cm_ko_02_ip,    ## Koherence
+         dd_cm_ko_04_np = 5 - dd_cm_ko_04_ip, 
+         
+         ## BFLP text
+         ed_bp_ie_05_np = 7 - ed_bp_ie_05_ip,    ## Interest-Enjoy
+         ed_bp_tp_02_np = 5 - ed_bp_tp_02_ip,    ## Theory-Praxis-Relation
+         ed_bp_tp_04_np =     ed_bp_tp_04_ip,
+         ed_bp_tp_06_np =     ed_bp_tp_06_ip, 
+         ed_bp_ko_02_np = 5 - ed_bp_ko_02_ip,    ## Koherence
+         ed_bp_ko_04_np = 5 - ed_bp_ko_04_ip, 
+         
+         ## CLassroom size text
+         ed_cs_ie_05_np = 7 - ed_cs_ie_05_ip,    ## Interest-Enjoy
+         ed_cs_tp_02_np = 5 - ed_cs_tp_02_ip,    ## Theory-Praxis-Relation
+         ed_cs_tp_04_np =     ed_cs_tp_04_ip,
+         ed_cs_tp_06_np =     ed_cs_tp_06_ip, 
+         ed_cs_ko_02_np = 5 - ed_cs_ko_02_ip,    ## Koherence
+         ed_cs_ko_04_np = 5 - ed_cs_ko_04_ip,
+         
+         
+        ## D-Index  FREE
+         di_01_np = po_01_np - 0.5*(ab_01_np + re_01_np),
+         di_02_np = po_02_np - 0.5*(ab_02_np + re_02_np),
+         di_03_np = po_03_np - 0.5*(ab_03_np + re_03_np),
+         di_04_np = po_04_np - 0.5*(ab_04_np + re_04_np),
+         di_05_np = po_05_np - 0.5*(ab_05_np + re_05_np),
+         di_06_np = po_06_np - 0.5*(ab_06_np + re_06_np),
+         di_07_np = po_07_np - 0.5*(ab_07_np + re_07_np),
+         di_08_np = po_08_np - 0.5*(ab_08_np + re_08_np),
+         di_09_np = po_09_np - 0.5*(ab_09_np + re_09_np),
+         di_10_np = po_10_np - 0.5*(ab_10_np + re_10_np),
+         di_11_np = po_11_np - 0.5*(ab_11_np + re_11_np),
+         di_12_np = po_12_np - 0.5*(ab_12_np + re_12_np),
+         di_13_np = po_13_np - 0.5*(ab_13_np + re_13_np))
+
+
+# Reject inverse coded original item
+rawdata_np <- tbl_df(rawdata%>%
+                       select(-ends_with("_ip"),
+                              -starts_with("tx_"),
+                              -starts_with("va_")
+                              )
+                     )
+
+
+
+
+# Create dummy variables (sum constrasts) for source
+rawdata_np$I_exp <- ifelse(rawdata_np$source == "exp", 1,
+                                ifelse(rawdata_np$source == "erf", -1,0))
+
+
+rawdata_np$I_wis <- ifelse(rawdata_np$source == "wis", 1,
+                                ifelse(rawdata_np$source == "erf", -1,0))
+         
+```
+
+
+
+
+## Reshape to long form & group mean centering
+As MPlus requires the so called "long format" of multilevel data we reshaped our join to that format. Also we needed to group mean center the level-1 (within-person level) predictors, to make sure that the random intercept are interpretable as person specific means of the dependend variable.
+```{r reshape to long, cache = T}
+
+rawdata_long_np <- rawdata_np%>%
+  mutate(source   = substr(Pseudonym, 1,3),
+         rotation = substr(Pseudonym, 5,6))%>%
+  gather(withinitem, value, starts_with("dd_") , starts_with("ed_"))%>%
+  mutate(paradigm   = substr(withinitem, 1,2),
+         topic      = substr(withinitem, 4,5),
+         withinitem2 = as.factor(substr(withinitem, 7,14)))%>%
+  select(-withinitem)%>%
+  select(-starts_with("dd"))%>%
+  select(-starts_with("ed"))%>%
+  spread(withinitem2, value)%>%
+  group_by(Pseudonym)%>%
+  mutate(tr_01_pc = tr_01_np - mean(tr_01_np, na.rm = TRUE),   ## Group Mean Centering
+         tr_02_pc = tr_02_np - mean(tr_02_np, na.rm = TRUE),
+         tr_03_pc = tr_03_np - mean(tr_03_np, na.rm = TRUE),
+         tr_04_pc = tr_04_np - mean(tr_04_np, na.rm = TRUE),
+         ke_01_pc = ke_01_np - mean(ke_01_np, na.rm = TRUE),
+         cl_01_pc = cl_01_np - mean(cl_01_np, na.rm = TRUE),
+         cl_02_pc = cl_02_np - mean(cl_02_np, na.rm = TRUE),
+         cl_03_pc = cl_03_np - mean(cl_03_np, na.rm = TRUE),
+         ie_01_pc = ie_01_np - mean(ie_01_np, na.rm = TRUE),
+         ie_02_pc = ie_02_np - mean(ie_02_np, na.rm = TRUE),
+         ie_03_pc = ie_03_np - mean(ie_03_np, na.rm = TRUE),
+         ie_04_pc = ie_04_np - mean(ie_04_np, na.rm = TRUE),
+         ie_05_pc = ie_05_np - mean(ie_05_np, na.rm = TRUE),
+         ko_01_pc = ko_01_np - mean(ko_01_np, na.rm = TRUE),
+         ko_02_pc = ko_02_np - mean(ko_02_np, na.rm = TRUE),
+         ko_03_pc = ko_03_np - mean(ko_03_np, na.rm = TRUE))%>%
+  ungroup()
+
+
+rawdata_long_np$IDnum <- as.numeric(as.factor(rawdata_long_np$Pseudonym))  ## Create numeric Person identifier for MPlus
+rawdata_long_np$topic <- factor(rawdata_long_np$topic, levels=c("we", "cm", "bp", "cs"))  ## Reorder Factor Levels
+rawdata_long_np$sourcenum <- as.numeric(as.factor(rawdata_long_np$source))  ## Convert Factor Levels to numeric factor for MPlus)
+```
+
+
+
+# Instruments
+The questionaire contained between-person level variables (asked every student teacher once) as well as within-person level variables (asked each student teacher once per topic). The follwing code describes the (multi-level) confirmatory factor analyses (MCFA), which allowed us to also report estimations of reliability using McDonalds ω [@Dunn2013]. Therefore we first specified so called "independent clusters model of confirmatory factor analysis (ICM-CFA)". If the model fit was lower then our criteria, we estimated measurement error covariances (within on factor and choosen by modification indices) freely.  
+Details about multi-level confirmatory factor analyses are given in the methods section of the corresponding article.
+
+## Print functions
+```{r printfunctions}
+## Define a print function for MPlus-Output
+fpf_mp <- function(x){  
+  
+  fm_tmp <- readModels(as.character(x))
+  
+  return(sprintf(
+    "χ² = %s, _df_ = %s,
+    CFI = %s, TLI = %s, 
+    RMSEA = %s, SRMR~within~ = %s,
+    SRMR~between~ = %s",
+    round(fm_tmp$summaries$ChiSqM_Value,3), 
+    fm_tmp$summaries$ChiSqM_DF,
+    round(fm_tmp$summaries$CFI,3),
+    round(fm_tmp$summaries$TLI,3),
+    round(fm_tmp$summaries$RMSEA_Estimate,3),
+    round(fm_tmp$summaries$SRMR.Within,3),
+    round(fm_tmp$summaries$SRMR.Between,3)
+  )
+  )
+}
+
+## Define a reliability print function for within person variables
+library(dplyr)
+rpf_wv <- function(x){  
+  
+   reldat <- rawdata_long_np%>%
+                    select(starts_with(as.character(x)), topic)%>%
+                    select(-ends_with("pc"))%>%
+                    group_by(topic)%>%
+                    do(data.frame(alpha = MBESS::ci.reliability(data.frame(select(., starts_with(as.character(x)))))))
+                      
+  
+  return(sprintf(
+          "%s < ω < %s (union of 95%%CI[%s, %s])",
+          round(min(reldat$alpha.est), 2),
+          round(max(reldat$alpha.est), 2),
+          round(min(reldat$alpha.ci.lower), 2),
+          round(max(reldat$alpha.ci.upper), 2)
+          )
+  )
+}
+
+## Define a print function for lavaan-Output ##############################
+fpf_la <- function(x){  
+
+  fm_tmp <- fitmeasures(x)
+                    
+  return(sprintf(
+          "χ² = %s, _df_ = %s, CFI = %s, TLI = %s, RMSEA = %s, SRMR = %s",
+           round(fm_tmp[c("chisq")],3), 
+                 fm_tmp[c("df")],
+           round(fm_tmp[c("cfi")],3),
+           round(fm_tmp[c("tli")],3),
+           round(fm_tmp[c("rmsea")],3),
+           round(fm_tmp[c("srmr")],3)
+             )
+       )
+}
+
+
+## Define a reliability print function for between person variables
+
+rpf_bv <- function(x){  
+  
+   reldat <- rawdata_np%>%
+                    select(starts_with(as.character(x)))%>%
+                    select(-ends_with("pc"))
+   relinfo <- MBESS::ci.reliability(data.frame(select(reldat, starts_with(as.character(x)))))
+                      
+  
+  return(sprintf(
+            "ω = %s, 95%%CI[%s, %s])",
+            round(relinfo$est, 2),
+            round(relinfo$ci.lower, 2),
+            round(relinfo$ci.upper, 2)
+            )
+         )
+}
+```
+
+## Perceived Theory-Practice-Integration
+### MCFA
+```{r MCFA_tp_unres, echo=T, warning=F, message=F, cache = F, eval = T, results = 'hide'}
+rawdata_long_np$IDnum <- as.numeric(as.factor(rawdata_long_np$Pseudonym))
+
+MCFA_tp_unres <- mplusObject(
+  
+   TITLE =  "MCFA__tp_unres",
+   
+   ANALYSIS =  "TYPE = TWOLEVEL;",
+    
+   VARIABLE =  "USEVARIABLES = tp_01_np tp_02_np tp_03_np tp_04_np 
+                tp_05_np tp_06_np;
+                CLUSTER = IDnum;",
+  
+   MODEL =      "%WITHIN%
+                 TPW BY tp_01_np tp_02_np tp_03_np tp_04_np tp_05_np tp_06_np;
+           
+                 %BETWEEN%
+                 TPB BY tp_01_np tp_02_np tp_03_np tp_04_np tp_05_np tp_06_np;",
+   
+   OUTPUT = "Standardized;",
+   
+   rdata = rawdata_long_np)
+
+MCFA_tp_unres_fit <- mplusModeler(MCFA_tp_unres, "MCFA_tp_unres.dat", run = 1)
+```
+
+### Fit Indices of the MCFA:
+`r fpf_mp("MCFA_tp_unres.out")`  
+
+### Reliability estimates:
+`r rpf_wv("tp")`
+
+
+## Theory-Specific Relativism
+```{r MCFA_tr_unres, echo=T, warning=F, message=F, cache = T, eval = T, results = 'hide'}
+library(MplusAutomation)
+MCFA_tr_unres <- mplusObject(
+  
+   TITLE =  "MCFA_tr_unres",
+   
+   ANALYSIS =  "TYPE = TWOLEVEL;",
+    
+   VARIABLE =  "USEVARIABLES = tr_01_np tr_02_np tr_03_np tr_04_np;
+                     CLUSTER = IDnum;",
+        
+        
+   MODEL    =      "%WITHIN%
+                    trW BY tr_01_np tr_02_np tr_03_np tr_04_np;
+        
+                    %BETWEEN%
+                    trB BY tr_01_np tr_02_np tr_03_np tr_04_np;
+                           TR_03_NP WITH TR_01_NP;
+                           TR_04_NP WITH TR_02_NP; ",  
+   
+   OUTPUT = "Standardized; MODINDICES",
+   
+   rdata = rawdata_long_np)
+
+MCFA_tr_unres_fit <- mplusModeler(MCFA_tr_unres, "MCFA_tr_unres.dat", run = 1)
+```
+
+### Fit Indices of the MCFA:
+`r fpf_mp("MCFA_tr_unres.out")`  
+
+### Reliability estimates:
+`r rpf_wv("tr")`
+
+## Koherence with the topic
+As a ICM-MCFA resulted in bad fit indices for the SRMR at the between level we fit a model, where the random intercepts only covaried.
+```{r MCFA_ko_within, echo=T, warning=F, message=F, cache = T, eval = F, results = 'hide'}
+library(MplusAutomation)
+MCFA_ko_within <- mplusObject(
+  
+   TITLE =  "MCFA_ko_within",
+   
+   ANALYSIS =  "TYPE = TWOLEVEL;",
+    
+   VARIABLE =  "USEVARIABLES = ko_01_np ko_02_np ko_03_np;
+               
+                     CLUSTER = IDnum;",
+        
+   MODEL    =      "%WITHIN%
+                    koW BY ko_01_np(1)
+                           ko_02_np(1)
+                           ko_03_np(1);
+
+                    %Between%
+                    ko_01_np WITH ko_02_np ko_03_np;
+                    ko_02_np WITH ko_03_np; ",   
+   
+   OUTPUT = "Standardized; Modindices",
+   rdata = rawdata_long_np)
+
+MCFA_ko_within_fit <- mplusModeler(MCFA_ko_within, "MCFA_ko_within.dat", run = 1)
+```
+
+### Fit Indices of the MCFA:
+χ² = 9.162, _df_ = 1, CFI = 994, TLI = 962, RMSEA = .075, SRMR~within~ = .005, SRMR~between~ = .065
+
+### Reliability estimates:
+```{r, results="asis", warning = F, message = F}
+  
+   reldat_ko <- rawdata_long_np%>%
+                    select(starts_with(as.character("ko_")), topic)%>%
+                    select(-ends_with("pc"), -ko_04_np)%>%
+                    group_by(topic)%>%
+                    do(data.frame(alpha = MBESS::ci.reliability(data.frame(select(., starts_with(as.character("ko")))))))
+                      
+  
+sprintf(
+          "%s < ω < %s (union of .95CI[%s,%s])",
+          round(min(reldat_ko$alpha.est), 2),
+          round(max(reldat_ko$alpha.est), 2),
+          round(min(reldat_ko$alpha.ci.lower), 2),
+          round(max(reldat_ko$alpha.ci.upper), 2)
+    
+  )
+```
+
+
+## Knowledge about the topic
+We assed knowledge about the topic with an single item.
+
+
+## Epistemic development
+```{r cfa_free, cache = T}
+di.cfa.model <- "di =~ di_01_np + di_02_np + di_03_np + di_04_np + di_05_np + di_06_np + di_07_np + 
+                       di_08_np + di_09_np + di_10_np + di_11_np + di_12_np + di_13_np
+                       di_04_np ~~ di_05_np
+                       di_03_np ~~ di_06_np"
+di.cfa.fitted <- cfa(di.cfa.model, data = rawdata_np)
+```
+
+### Fit Indices of the CFA:
+`r fpf_la(di.cfa.fitted)`  
+
+### Reliability estimates:
+`r rpf_bv("di_")`
+
+
+## Epistemic beliefs inventory
+```{r cfa_ebi, cache = T}
+
+ebi.cfa.model <- "abs =~ stab_a_27 + stab_a_41 + rech_a_03 + rech_a_06 + rech_a_10 + komp_a_07 +
+                         komp_a_20 + komp_a_42 + komp_a_39 + quel_a_08 + quel_a_11 + quel_a_35
+                  rel =~ stab_r_04 + stab_r_18 + stab_r_23 + stab_r_21 + rech_r_17 + rech_r_33 +                           komp_r_22 + komp_r_30 + komp_r_43 + quel_r_09 + quel_r_34
+
+
+                  stab =~ stab_a_27 + stab_a_41 + stab_r_04 + stab_r_18
+                  rech =~ rech_a_03 + rech_a_06 + rech_a_10 + rech_r_17 + rech_r_33
+                  komp =~ komp_a_07 + komp_a_20 + komp_a_42 + komp_a_39 + komp_r_22 + komp_r_30 + 
+                          komp_r_43
+                  quel =~ quel_a_08 + quel_a_11 + quel_a_35 + quel_r_09 + quel_r_34
+
+                  quel_a_11 ~~ quel_a_35
+                  stab_r_04 ~~ stab_r_23
+                  rech_r_17 ~~ rech_r_33 " 
+
+
+
+ebi.cfa.fitted <- cfa(ebi.cfa.model, data = rawdata)
+```
+
+### Fit Indices of the CFA:
+`r fpf_la(ebi.cfa.fitted)`  
+
+### Reliability estimates:
+* Absolutism: ω = `r round(MBESS::ci.reliability(data.frame(select(rawdata_np, contains("_a_"))))$est, 2)`, 95%CI[`r round(MBESS::ci.reliability(data.frame(select(rawdata_np, contains("_a_"))))$ci.lower, 2)`, `r round(MBESS::ci.reliability(data.frame(select(rawdata_np, contains("_a_"))))$ci.upper, 2)`])
+* Relativism: ω = `r round(MBESS::ci.reliability(data.frame(select(rawdata_np, contains("_r"))))$est, 2)`, 95%CI[`r round(MBESS::ci.reliability(data.frame(select(rawdata_np, contains("_r_"))))$ci.lower, 2)`, `r round(MBESS::ci.reliability(data.frame(select(rawdata_np, contains("_r_"))))$ci.upper, 2)`])
+
+
+## Connotative aspect of epistemic beliefs
+```{r cfa_ceab, cache = T}
+caeb.cfa.model <- " tex =~ te_01_np + te_02_np + te_03_np + te_04_np + te_05_np + te_06_np + 
+                           te_07_np + te_08_np + te_09_np + te_10_np
+                    var =~ vr_01_np + vr_02_np + vr_03_np + vr_04_np + vr_05_np + vr_06_np + 
+                           vr_07_np
+                           te_06_np ~~ te_10_np
+                           te_05_np ~~ te_08_np
+                           vr_02_np ~~ vr_04_np
+                           te_03_np ~~ vr_03_np 
+                           vr_04_np ~~ vr_07_np 
+                           te_06_np ~~ te_07_np "
+
+
+caeb.cfa.fitted <- cfa(caeb.cfa.model, data = rawdata_np)
+```
+
+### Fit Indices of the CFA:
+`r fpf_la(caeb.cfa.fitted)`  
+
+### Reliability estimates:
+* Variability: `r rpf_bv("vr_")`
+* Texture: `r rpf_bv("te_")`
+
+## Muenster epistemic truthworthiness inventory
+```{r cfa meti, cache = T}
+meti.cfa.model <- "me =~ me_01_np + me_02_np + me_03_np + me_04_np + me_05_np + me_06_np
+                   mi =~ mi_01_np + mi_02_np + mi_03_np + mi_04_np
+                   mb =~ mb_01_np + mb_02_np + mb_03_np + mb_04_np
+
+                   mi_01_np ~~ mi_02_np
+                   mb_01_np ~~ mb_02_np
+                   mi_03_np ~~ mi_04_np
+                   mb_03_np ~~ mb_04_np"
+
+meti.cfa.fitted <- cfa(meti.cfa.model, data = rawdata_np)
+```
+
+### Fit Indices of the CFA:
+`r fpf_la(meti.cfa.fitted)`  
+
+### Reliability estimates:
+* Expertise: `r rpf_bv("me_")`
+* Integrity: `r rpf_bv("mi_")`
+* Benevolence: `r rpf_bv("mb_")`
+
+
+
+# Results
+This sections provides the code and output of the analyses we conducted to investigate our hypotheses. Note that the heading the same than in the corresponding article.
+
+## Confirmatory Factor Analysis
+### M1: MCFA with level-variant measurement models
+```{r MCFA_tp_unres2, echo=T, warning=F, message=F, cache = T, eval = T, results = 'hide'}
+
+MCFA_tp_unres <- mplusObject(
+  
+   TITLE =  "MCFA__tp_unres",
+   
+   ANALYSIS =  "TYPE = TWOLEVEL;",
+    
+   VARIABLE =  "USEVARIABLES = tp_01_np tp_02_np tp_03_np tp_04_np 
+                tp_05_np tp_06_np;
+   
+                CLUSTER = IDnum;",
+   
+
+   MODEL =      "%WITHIN%
+                 TPW BY tp_01_np
+   	                    tp_02_np
+   	                    tp_03_np
+   	                    tp_04_np
+                        tp_05_np
+                        tp_06_np;
+           
+   
+                  %BETWEEN%
+                  TPB BY tp_01_np
+   	                     tp_02_np
+   	                     tp_03_np
+   	                     tp_04_np
+                         tp_05_np
+                         tp_06_np;",
+   OUTPUT = "Standardized;",
+   rdata = rawdata_long_np)
+
+MCFA_tp_unres_fit <- mplusModeler(MCFA_tp_unres, "MCFA_tp_unres.dat", run = 1)
+```
+
+* The fitindices of M1 were `r fpf_mp("MCFA_tp_unres.out")`  
+* An estimation of ICC(1)-coeffients resulted in a range of `r round(min(c(psychometric::ICC1.lme(tp_01_np, IDnum, rawdata_long_np), psychometric::ICC1.lme(tp_02_np, IDnum, rawdata_long_np), psychometric::ICC1.lme(tp_03_np, IDnum, rawdata_long_np), psychometric::ICC1.lme(tp_04_np, IDnum, rawdata_long_np))),2)` and `r round(max(c(psychometric::ICC1.lme(tp_01_np, IDnum, rawdata_long_np), psychometric::ICC1.lme(tp_02_np, IDnum, rawdata_long_np), psychometric::ICC1.lme(tp_03_np, IDnum, rawdata_long_np), psychometric::ICC1.lme(tp_04_np, IDnum, rawdata_long_np))),2)`.
+
+### M2:  MCFA with level-invariant measurement models
+
+```{r MCFA_res, echo=T, warning=F, message=F, cache = T, eval = T, results = 'hide'}
+# Mplusmodell
+MCFA_tp_res <- mplusObject(
+  
+   TITLE =  "MCFA_tp_res",
+   
+   ANALYSIS =  "TYPE = TWOLEVEL;",
+    
+   VARIABLE =  "USEVARIABLES = tp_01_np tp_02_np tp_03_np tp_04_np 
+                tp_05_np tp_06_np;
+   
+                CLUSTER = IDnum;",
+   
+
+   MODEL =      "%WITHIN%
+                 TPW BY tp_01_np(01)
+   	                    tp_02_np(02)
+   	                    tp_03_np(03)
+   	                    tp_04_np(04)
+                        tp_05_np(05)
+                        tp_06_np(06);
+           
+   
+                  %BETWEEN%
+                  TPB BY tp_01_np(01)
+   	                     tp_02_np(02)
+   	                     tp_03_np(03)
+   	                     tp_04_np(04)
+                         tp_05_np(05)
+                         tp_06_np(06);",
+   
+   OUTPUT = "Standardized Modindices(5);",
+   
+   rdata = rawdata_long_np)
+
+MCFA_tp_res_fit <- mplusModeler(MCFA_tp_res, "MCFA_tp_res.dat", run = 1)
+```
+
+* The fitindices of M2 were `r fpf_mp("MCFA_tp_res.out")`)
+* A modelcomparison test resulted in:
+```{r MCFA_compare_tp_unres_tp_res, eval=T, echo=T, warning=F, message=F, cache = T}
+compareModels(readModels("MCFA_tp_unres.out"), readModels("MCFA_tp_res.out"), diffTest = T, show = "summaries")
+```
+* The ICC of the latent variable was `r round(0.129/(0.229 + 0.129),2)`
+
+
+## Predictive Effects of Source (H1)
+
+### M3: Multi-Group MCFA Model
+```{r MGMCFA_strong_invariance, cache = T, eval = T, results = 'hide', warning = F, message = F}
+
+### MGMCFA Modell _____________________________________________________________________
+
+MGMCFA_tp_strong <- mplusObject(
+  
+   TITLE =  "MGMCFA_tp_strong",
+   
+   ANALYSIS =  "TYPE = TWOLEVEL;",
+    
+   VARIABLE =  "USEVARIABLES = tp_01_np tp_02_np tp_03_np tp_04_np 
+                tp_05_np tp_06_np;
+                GROUPING IS sourcenum (1 = erf 2 = exp 3 = wis);
+                CLUSTER = IDnum;",
+   
+
+   MODEL =      "%WITHIN%
+                 TPW BY tp_01_np tp_02_np tp_03_np tp_04_np tp_05_np tp_06_np;
+   
+                 %BETWEEN%
+                 TPB BY tp_01_np tp_02_np tp_03_np tp_04_np tp_05_np tp_06_np;
+   
+                 tp_06_np@0   ;",
+
+   OUTPUT = "Standardized MODINDICES(5);",
+   rdata = rawdata_long_np)
+
+MGMCFA_tp_strong_fit <- mplusModeler(MGMCFA_tp_strong, "MGMCFA_tp_strong.dat", run = 1)
+```
+
+* The fitindices of M3 were: `r fpf_mp("MGMCFA_tp_strong.out")`
+
+
+### M4: MIMIC Model with source indicator variables as predictors
+```{r MIMIC_pred_source, cache = T, eval=T, warning = F, message = F, results = 'hide'}
+
+# Dummyvariables for MIMIC Model 
+rawdata_long_np$I_exp <- ifelse(rawdata_long_np$source == "exp", 1, 0)
+rawdata_long_np$I_wis <- ifelse(rawdata_long_np$source == "wis", 1, 0)
+
+
+### MIMIC_pred_source Modell  _____________________________________________________________________
+
+MIMIC_pred_source <- mplusObject(
+  
+   TITLE =  "MIMIC_pred_source",
+   
+   ANALYSIS =  "TYPE = TWOLEVEL;",
+    
+   VARIABLE =  "USEVARIABLES = tp_01_np tp_02_np tp_03_np tp_04_np 
+                tp_05_np tp_06_np I_exp I_wis;
+
+                BETWEEN = I_exp I_wis;
+                CLUSTER = IDnum;",
+   
+
+   MODEL =      "%WITHIN%
+                 TPW BY tp_01_np tp_02_np tp_03_np tp_04_np tp_05_np tp_06_np;
+
+                 %BETWEEN%
+                 TPB BY tp_01_np tp_02_np tp_03_np tp_04_np tp_05_np tp_06_np;
+                 tp_06_np@0;
+                 TPB ON I_exp I_wis;",
+   
+   OUTPUT = "Standardized MODINDICES(5);",
+   
+   rdata = rawdata_long_np)
+
+MIMIC_pred_source_fit <- mplusModeler(MIMIC_pred_source, "MIMIC_pred_source.dat", run = 1)
+```
+
+* The fitindices of M4 were: `r fpf_mp("MIMIC_pred_source.out")`
+
+
+## Predictive Effects of epistemic beliefs (H2)
+
+### M5: Predictive Effects of D-Index
+```{r MGMLSEM_pred_di_man, cache = T, eval=T, results = 'hide', warning = F, message = F}
+
+rawdata_long_np <-
+  rawdata_long_np%>%
+    mutate(di_gc = scale(rowMeans(data.frame(di_01_np, di_02_np, di_03_np, di_04_np, di_05_np, 
+                                     di_06_np, di_07_np, di_08_np, di_09_np, di_10_np,
+                                     di_11_np, di_12_np, di_13_np), na.rm = T), scale = F),
+           tr_pc = rowMeans(data.frame(tr_01_pc, tr_02_pc, tr_03_pc, tr_04_pc), na.rm = T),
+           di_gc = ifelse(scale(di_gc) > 3.29, NA, ifelse(scale(di_gc) < -3.29, NA, di_gc)),  ## removing outliers
+           tr_pc = ifelse(scale(tr_pc) > 3.29, NA, ifelse(scale(tr_pc) < -3.29, NA, tr_pc)),  ## in the way we preregistered
+           di_gc_exp = di_gc*I_exp,
+           di_gc_wis = di_gc*I_wis)
+
+
+### MGMCFA Modell  _____________________________________________________________________
+
+MIMIC_pred_di_man <- mplusObject(
+  
+   TITLE =  "MIMIC_pred_di_man",
+   
+   ANALYSIS =  "TYPE = TWOLEVEL;",
+    
+   VARIABLE =  "USEVARIABLES = tp_01_np tp_02_np tp_03_np tp_04_np 
+                tp_05_np tp_06_np
+                tr_pc
+                di_gc di_gc_exp di_gc_wis I_exp I_wis;
+
+                WITHIN = tr_pc;
+                BETWEEN = di_gc di_gc_exp di_gc_wis I_exp I_wis;
+                CLUSTER = IDnum;",
+   
+
+   MODEL =      "%WITHIN%
+                 TPW BY tp_01_np tp_02_np tp_03_np tp_04_np tp_05_np tp_06_np;
+                 TPW ON tr_pc;
+
+                 %BETWEEN%
+                 TPB BY tp_01_np tp_02_np tp_03_np tp_04_np tp_05_np tp_06_np;
+                 tp_05_np@0;
+                 TPB ON di_gc di_gc_exp di_gc_wis I_exp I_wis;",
+   
+   OUTPUT = "Standardized MODINDICES(5);",
+   
+   rdata = rawdata_long_np)
+
+MIMIC_pred_di_man_fit <- mplusModeler(MIMIC_pred_di_man, "MIMIC_pred_di_man.dat", run = 1)
+```
+
+* The fitindices of M5 were: `r fpf_mp("MIMIC_pred_di_man.out")`
+* The standardized predictive effects of M5 were:
+```{r results="asis", cache = F}
+MIMIC_pred_di_man_results <- readModels("MIMIC_pred_di_man.out")
+pander::pander(MIMIC_pred_di_man_results$parameters$stdyx.standardized%>% filter(grepl("ON", paramHeader)))
+```
+
+
+
+### M6: Predictive Effects of EBI
+```{r MIMIC_pred_ebi_man, cache = T, eval=T, results = 'hide', warning = F, message = F}
+
+rawdata_long_np <-
+  rawdata_long_np%>%
+    mutate(abs_gc = scale(rowMeans(data.frame(stab_a_27, stab_a_41, rech_a_03, rech_a_06, rech_a_10, komp_a_07,
+                                     komp_a_20, komp_a_42, komp_a_39, quel_a_08, quel_a_11, quel_a_35), na.rm = T),
+                          scale = F),
+           rel_gc = scale(rowMeans(data.frame(stab_r_04, stab_r_18, stab_r_23, stab_r_21, rech_r_17, rech_r_33,  
+                                     komp_r_22, komp_r_30, komp_r_43, quel_r_09, quel_r_34), na.rm = T), 
+                          scale = F),
+           abs_gc = ifelse(scale(abs_gc) > 3.29, NA, ifelse(scale(abs_gc) < -3.29, NA, abs_gc)), ## removing outliers
+           rel_gc = ifelse(scale(rel_gc) > 3.29, NA, ifelse(scale(rel_gc) < -3.29, NA, rel_gc)), ## in the way we preregistered
+           abs_gc_exp = abs_gc*I_exp,
+           rel_gc_exp = rel_gc*I_exp,
+           abs_gc_wis = abs_gc*I_wis,
+           rel_gc_wis = rel_gc*I_wis)
+
+### MIMIC_pred_ebi_man Modell  _____________________________________________________________________
+
+MIMIC_pred_ebi_man <- mplusObject(
+  
+   TITLE =  "MIMIC_pred_ebi_man",
+   
+   ANALYSIS =  "TYPE = TWOLEVEL;",
+    
+   VARIABLE =  "USEVARIABLES = tp_01_np tp_02_np tp_03_np tp_04_np 
+                tp_05_np tp_06_np
+                tr_pc
+                abs_gc rel_gc abs_gc_exp rel_gc_exp abs_gc_wis rel_gc_wis 
+                I_exp I_wis;
+
+                WITHIN =  tr_pc;
+                BETWEEN = abs_gc rel_gc abs_gc_exp rel_gc_exp abs_gc_wis rel_gc_wis
+                          I_exp I_wis;
+                CLUSTER = IDnum;",
+   
+
+   MODEL =      "%WITHIN%
+                 TPW BY tp_01_np tp_02_np tp_03_np tp_04_np tp_05_np tp_06_np;
+                 TPW ON tr_pc;
+
+                 %BETWEEN%
+                 TPB BY tp_01_np tp_02_np tp_03_np tp_04_np tp_05_np tp_06_np;
+                 tp_05_np@0;
+                 TPB ON abs_gc rel_gc abs_gc_exp rel_gc_exp abs_gc_wis rel_gc_wis 
+                        I_exp I_wis;
+   
+   
+   ",
+   OUTPUT = "Standardized MODINDICES(5);",
+   rdata = rawdata_long_np)
+
+MIMIC_pred_ebi_man_fit <- mplusModeler(MIMIC_pred_ebi_man, "MIMIC_pred_ebi_man.dat", run = 1)
+```
+
+* The fitindices of M6 were: `r fpf_mp("MIMIC_pred_ebi_man.out")`
+* The standardized predictive effects of M6 were:
+```{r results="asis", cache = F}
+MIMIC_pred_ebi_man_results <- readModels("MIMIC_pred_ebi_man.out")
+pander::pander(MIMIC_pred_ebi_man_results$parameters$stdyx.standardized%>% filter(grepl("ON", paramHeader)))
+```
+
+
+
+
+
+## Confounders of Predictive Effects of epistemic beliefs
+
+### M7: Confounders of Predictive Effects D-Index (H3)
+
+```{r MIMIC_conf_di_man, cache = T, eval = T, results = 'hide', warning = F, message = F}
+
+### Generate arithemtic means of scales  _____________________________________________________________________
+rawdata_long_np <- rawdata_long_np%>%
+  mutate(cl_pc = rowMeans(data.frame(cl_01_pc, cl_02_pc, cl_03_pc), na.rm = T),
+         ko_pc = rowMeans(data.frame(ko_01_pc, ko_02_pc, ko_03_pc), na.rm = T),
+         me_np = rowMeans(data.frame(me_01_np, me_02_np, me_03_np, me_04_np, me_05_np, me_06_np), na.rm = T),
+         mi_np = rowMeans(data.frame(mi_01_np, mi_02_np, mi_03_np, mi_04_np), na.rm = T),
+         mb_np = rowMeans(data.frame(mb_01_np, mb_02_np, mb_03_np, mb_04_np), na.rm = T),
+         ko_pc = ifelse(scale(ko_pc) > 3.29, NA,ifelse(scale(ko_pc) < -3.29, NA, ko_pc)),
+         me_np = ifelse(scale(me_np) > 3.29, NA,ifelse(scale(me_np) < -3.29, NA, me_np)),
+         mi_np = ifelse(scale(mi_np) > 3.29, NA,ifelse(scale(mi_np) < -3.29, NA, mi_np)),
+         mb_np = ifelse(scale(mb_np) > 3.29, NA,ifelse(scale(mb_np) < -3.29, NA, mb_np)))
+
+
+
+### MIMIC_conf_di_man Modell  _____________________________________________________________________
+
+MIMIC_conf_di_man <- mplusObject(
+  
+   TITLE =  "MIMIC_conf_di_man",
+   
+   ANALYSIS =  "TYPE = TWOLEVEL;",
+    
+   VARIABLE =  "USEVARIABLES = tp_01_np tp_02_np tp_03_np tp_04_np 
+                tp_05_np tp_06_np
+                tr_pc ke_01_pc ko_pc 
+                di_gc di_gc_exp di_gc_wis I_exp I_wis me_np mi_np mb_np;
+
+                WITHIN =  tr_pc ke_01_pc ko_pc;
+                BETWEEN = di_gc di_gc_exp di_gc_wis I_exp I_wis me_np mi_np mb_np;
+                CLUSTER = IDnum;",
+   
+
+   MODEL =      "%WITHIN%
+                 TPW BY tp_01_np tp_02_np tp_03_np tp_04_np tp_05_np tp_06_np;
+
+                 TPW ON tr_pc ke_01_pc ko_pc ;
+
+                 %BETWEEN%
+                 TPB BY tp_01_np tp_02_np tp_03_np tp_04_np tp_05_np tp_06_np;
+                 tp_05_np@0;
+                 TPB ON di_gc di_gc_exp di_gc_wis I_exp I_wis me_np mi_np mb_np; ",
+   
+   OUTPUT = "Standardized MODINDICES(5);",
+   
+   rdata = rawdata_long_np)
+
+MIMIC_conf_di_man_fit <- mplusModeler(MIMIC_conf_di_man, "MIMIC_conf_di_man.dat", run = 1)
+```
+
+* The fitindices of M7 were: `r fpf_mp("MIMIC_conf_di_man.out")`
+* The standardized predictive effects of M7 were:
+```{r results="asis", cache = F}
+MIMIC_conf_di_man_results <- readModels("MIMIC_conf_di_man.out")
+pander::pander(MIMIC_conf_di_man_results$parameters$stdyx.standardized%>% filter(grepl("ON", paramHeader)))
+```
+
+
+### M8: Confounders of Predictive Effects EBI (H3)
+
+```{r MGPATH_conf_eb_ebi, cache = T, eval = T, results = 'hide', warning = F, message = F}
+
+### MIMIC_conf_ebi_man Modell  _____________________________________________________________________
+
+MIMIC_conf_ebi_man <- mplusObject(
+  
+   TITLE =  "MIMIC_conf_ebi_man",
+   
+   ANALYSIS =  "TYPE = TWOLEVEL;",
+    
+   VARIABLE =  "USEVARIABLES = tp_01_np tp_02_np tp_03_np tp_04_np 
+                tp_05_np tp_06_np
+                tr_pc ke_01_pc ko_pc 
+                abs_gc rel_gc abs_gc_exp rel_gc_exp abs_gc_wis rel_gc_wis
+                I_exp I_wis me_np mi_np mb_np;
+
+                WITHIN =  tr_pc ke_01_pc ko_pc;
+                BETWEEN = abs_gc rel_gc abs_gc_exp rel_gc_exp abs_gc_wis rel_gc_wis
+                          I_exp I_wis me_np mi_np mb_np;
+                CLUSTER = IDnum;",
+   
+
+   MODEL =      "%WITHIN%
+                 TPW BY tp_01_np tp_02_np tp_03_np tp_04_np tp_05_np tp_06_np;
+
+                 TPW ON tr_pc ke_01_pc  ko_pc ;
+
+                 %BETWEEN%
+                 TPB BY tp_01_np tp_02_np tp_03_np tp_04_np tp_05_np tp_06_np;
+                 tp_05_np@0;
+                 TPB ON abs_gc rel_gc abs_gc_exp rel_gc_exp abs_gc_wis rel_gc_wis
+                        I_exp I_wis me_np mi_np mb_np;",
+   
+   OUTPUT = "Standardized MODINDICES(5);",
+   
+   rdata = rawdata_long_np)
+
+MIMIC_conf_ebi_man_fit <- mplusModeler(MIMIC_conf_ebi_man, "MIMIC_conf_ebi_man.dat", run = 1)
+```
+
+* The fitindices of M8 were: `r fpf_mp("MIMIC_conf_ebi_man.out")`
+* The standardized predictive effects of M8 were:
+```{r results="asis", cache = F}
+MIMIC_conf_ebi_man_results <- readModels("MIMIC_conf_ebi_man.out")
+pander::pander(MIMIC_conf_ebi_man_results$parameters$stdyx.standardized%>% filter(grepl("ON", paramHeader)))
+```
+
+
+# Literature

@@ -1,0 +1,490 @@
+Mplus VERSION 7.1 (Mac)
+MUTHEN & MUTHEN
+08/29/2016   3:30 PM
+
+INPUT INSTRUCTIONS
+
+  TITLE:
+  MCFA_ko_unres
+  DATA:
+  FILE = "MCFA_ko_unres.dat";
+
+  VARIABLE:
+  NAMES = ko_01_np ko_02_np ko_03_np ko_04_np IDnum;
+   MISSING=.;
+   USEVARIABLES = ko_01_np ko_02_np ko_03_np ko_04_np;
+                       CLUSTER = IDnum;
+  ANALYSIS:
+  TYPE = TWOLEVEL;
+                  STARTS = 100 10;
+  MODEL:
+  %WITHIN%
+                      koW BY ko_01_np
+                             ko_02_np
+                             ko_03_np
+                             ko_04_np;
+                      %Between%
+                      koB BY ko_01_np
+                             ko_02_np
+                             ko_03_np
+                             ko_04_np;
+
+  OUTPUT:
+  Standardized; Modindices
+
+
+
+*** WARNING
+  Data set contains cases with missing on all variables.
+  These cases were not included in the analysis.
+  Number of cases with missing on all variables:  20
+   1 WARNING(S) FOUND IN THE INPUT INSTRUCTIONS
+
+
+
+
+MCFA_ko_unres
+
+SUMMARY OF ANALYSIS
+
+Number of groups                                                 1
+Number of observations                                        1440
+
+Number of dependent variables                                    4
+Number of independent variables                                  0
+Number of continuous latent variables                            2
+
+Observed dependent variables
+
+  Continuous
+   KO_01_NP    KO_02_NP    KO_03_NP    KO_04_NP
+
+Continuous latent variables
+   KOW         KOB
+
+Variables with special functions
+
+  Cluster variable      IDNUM
+
+Estimator                                                      MLR
+Information matrix                                        OBSERVED
+Maximum number of iterations                                   100
+Convergence criterion                                    0.100D-05
+Maximum number of EM iterations                                500
+Convergence criteria for the EM algorithm
+  Loglikelihood change                                   0.100D-02
+  Relative loglikelihood change                          0.100D-05
+  Derivative                                             0.100D-03
+Minimum variance                                         0.100D-03
+Maximum number of steepest descent iterations                   20
+Maximum number of iterations for H1                           2000
+Convergence criterion for H1                             0.100D-03
+Optimization algorithm                                         EMA
+Random Starts Specifications
+  Number of initial stage random starts                        100
+  Number of final stage optimizations                           10
+  Number of initial stage iterations                            10
+  Initial stage convergence criterion                    0.100D+01
+  Random starts scale                                    0.500D+01
+  Random seed for generating random starts                       0
+
+Input data file(s)
+  MCFA_ko_unres.dat
+Input data format  FREE
+
+
+SUMMARY OF DATA
+
+     Number of missing data patterns            12
+     Number of clusters                        362
+
+     Average cluster size        3.978
+
+     Estimated Intraclass Correlations for the Y Variables
+
+                Intraclass              Intraclass              Intraclass
+     Variable  Correlation   Variable  Correlation   Variable  Correlation
+
+     KO_01_NP     0.022      KO_02_NP     0.081      KO_03_NP     0.055
+     KO_04_NP     0.107
+
+
+
+COVARIANCE COVERAGE OF DATA
+
+Minimum covariance coverage value   0.100
+
+
+     PROPORTION OF DATA PRESENT
+
+
+           Covariance Coverage
+              KO_01_NP      KO_02_NP      KO_03_NP      KO_04_NP
+              ________      ________      ________      ________
+ KO_01_NP       0.985
+ KO_02_NP       0.974         0.986
+ KO_03_NP       0.972         0.975         0.985
+ KO_04_NP       0.969         0.973         0.972         0.984
+
+
+RANDOM STARTS RESULTS RANKED FROM THE BEST TO THE WORST LOGLIKELIHOOD VALUES
+
+1 perturbed starting value run(s) did not converge in the initial stage
+optimizations.
+
+Final stage loglikelihood values at local maxima, seeds, and initial stage start numbers:
+
+           -5325.522  789985           67
+           -5327.697  967237           48
+           -5327.698  462953           7
+
+7 perturbed starting value run(s) did not converge.
+
+
+
+     WARNING:  THE BEST LOGLIKELIHOOD VALUE WAS NOT REPLICATED.  THE
+     SOLUTION MAY NOT BE TRUSTWORTHY DUE TO LOCAL MAXIMA.  INCREASE THE
+     NUMBER OF RANDOM STARTS.
+
+     WARNING: THE MODEL ESTIMATION HAS REACHED A SADDLE POINT OR A POINT WHERE THE
+     OBSERVED AND THE EXPECTED INFORMATION MATRICES DO NOT MATCH.
+     AN ADJUSTMENT TO THE ESTIMATION OF THE INFORMATION MATRIX HAS BEEN MADE.
+     THE CONDITION NUMBER IS      -0.481D-05.
+     THE PROBLEM MAY ALSO BE RESOLVED BY DECREASING THE VALUE OF THE
+     MCONVERGENCE OR LOGCRITERION OPTIONS OR BY CHANGING THE STARTING VALUES
+     OR BY USING THE MLF ESTIMATOR.
+
+
+THE MODEL ESTIMATION TERMINATED NORMALLY
+
+     WARNING:  THE RESIDUAL COVARIANCE MATRIX (THETA) IS NOT POSITIVE DEFINITE.
+     THIS COULD INDICATE A NEGATIVE VARIANCE/RESIDUAL VARIANCE FOR AN OBSERVED
+     VARIABLE, A CORRELATION GREATER OR EQUAL TO ONE BETWEEN TWO OBSERVED
+     VARIABLES, OR A LINEAR DEPENDENCY AMONG MORE THAN TWO OBSERVED VARIABLES.
+     CHECK THE RESULTS SECTION FOR MORE INFORMATION.
+
+
+
+MODEL FIT INFORMATION
+
+Number of Free Parameters                       20
+
+Loglikelihood
+
+          H0 Value                       -5325.522
+          H0 Scaling Correction Factor      1.4559
+            for MLR
+          H1 Value                       -5280.675
+          H1 Scaling Correction Factor      1.5633
+            for MLR
+
+Information Criteria
+
+          Akaike (AIC)                   10691.043
+          Bayesian (BIC)                 10796.491
+          Sample-Size Adjusted BIC       10732.958
+            (n* = (n + 2) / 24)
+
+Chi-Square Test of Model Fit
+
+          Value                             42.702*
+          Degrees of Freedom                     4
+          P-Value                           0.0000
+          Scaling Correction Factor         2.1004
+            for MLR
+
+*   The chi-square value for MLM, MLMV, MLR, ULSMV, WLSM and WLSMV cannot be used
+    for chi-square difference testing in the regular way.  MLM, MLR and WLSM
+    chi-square difference testing is described on the Mplus website.  MLMV, WLSMV,
+    and ULSMV difference testing is done using the DIFFTEST option.
+
+RMSEA (Root Mean Square Error Of Approximation)
+
+          Estimate                           0.082
+
+CFI/TLI
+
+          CFI                                0.980
+          TLI                                0.941
+
+Chi-Square Test of Model Fit for the Baseline Model
+
+          Value                           1970.353
+          Degrees of Freedom                    12
+          P-Value                           0.0000
+
+SRMR (Standardized Root Mean Square Residual)
+
+          Value for Within                   0.025
+          Value for Between                  0.252
+
+
+
+MODEL RESULTS
+
+                                                    Two-Tailed
+                    Estimate       S.E.  Est./S.E.    P-Value
+
+Within Level
+
+ KOW      BY
+    KO_01_NP           1.000      0.000    999.000    999.000
+    KO_02_NP           0.884      0.031     28.566      0.000
+    KO_03_NP           0.946      0.024     39.501      0.000
+    KO_04_NP           0.808      0.031     26.233      0.000
+
+ Variances
+    KOW                0.616      0.030     20.213      0.000
+
+ Residual Variances
+    KO_01_NP           0.208      0.017     12.028      0.000
+    KO_02_NP           0.205      0.017     12.301      0.000
+    KO_03_NP           0.144      0.014     10.534      0.000
+    KO_04_NP           0.196      0.015     12.938      0.000
+
+Between Level
+
+ KOB      BY
+    KO_01_NP           1.000      0.000    999.000    999.000
+    KO_02_NP          -5.645      0.782     -7.214      0.000
+    KO_03_NP          -1.947      0.635     -3.068      0.002
+    KO_04_NP         -11.626      0.304    -38.229      0.000
+
+ Intercepts
+    KO_01_NP           2.881      0.025    116.919      0.000
+    KO_02_NP           3.248      0.025    128.154      0.000
+    KO_03_NP           3.053      0.024    127.155      0.000
+    KO_04_NP           3.351      0.025    135.942      0.000
+
+ Variances
+    KOB                0.001      0.000      6.663      0.000
+
+ Residual Variances
+    KO_01_NP           0.008      0.011      0.762      0.446
+    KO_02_NP           0.042      0.012      3.590      0.000
+    KO_03_NP           0.016      0.008      1.965      0.049
+    KO_04_NP          -0.059      0.020     -2.920      0.003
+
+
+STANDARDIZED MODEL RESULTS
+
+
+STDYX Standardization
+
+                                                    Two-Tailed
+                    Estimate       S.E.  Est./S.E.    P-Value
+
+Within Level
+
+ KOW      BY
+    KO_01_NP           0.865      0.012     71.504      0.000
+    KO_02_NP           0.837      0.016     51.166      0.000
+    KO_03_NP           0.890      0.011     82.107      0.000
+    KO_04_NP           0.820      0.016     51.222      0.000
+
+ Variances
+    KOW                1.000      0.000    999.000    999.000
+
+ Residual Variances
+    KO_01_NP           0.253      0.021     12.078      0.000
+    KO_02_NP           0.299      0.027     10.938      0.000
+    KO_03_NP           0.208      0.019     10.775      0.000
+    KO_04_NP           0.327      0.026     12.452      0.000
+
+Between Level
+
+ KOB      BY
+    KO_01_NP           0.320      0.191      1.678      0.093
+    KO_02_NP          -0.650      0.082     -7.964      0.000
+    KO_03_NP          -0.429      0.109     -3.917      0.000
+    KO_04_NP          -1.352      0.138     -9.790      0.000
+
+ Intercepts
+    KO_01_NP          29.679     17.505      1.695      0.090
+    KO_02_NP          12.032      1.171     10.273      0.000
+    KO_03_NP          21.658      5.304      4.083      0.000
+    KO_04_NP          12.544      1.321      9.497      0.000
+
+ Variances
+    KOB                1.000      0.000    999.000    999.000
+
+ Residual Variances
+    KO_01_NP           0.898      0.122      7.352      0.000
+    KO_02_NP           0.578      0.106      5.455      0.000
+    KO_03_NP           0.816      0.094      8.687      0.000
+    KO_04_NP          -0.828    999.000    999.000    999.000
+
+
+STDY Standardization
+
+                                                    Two-Tailed
+                    Estimate       S.E.  Est./S.E.    P-Value
+
+Within Level
+
+ KOW      BY
+    KO_01_NP           0.865      0.012     71.504      0.000
+    KO_02_NP           0.837      0.016     51.166      0.000
+    KO_03_NP           0.890      0.011     82.107      0.000
+    KO_04_NP           0.820      0.016     51.222      0.000
+
+ Variances
+    KOW                1.000      0.000    999.000    999.000
+
+ Residual Variances
+    KO_01_NP           0.253      0.021     12.078      0.000
+    KO_02_NP           0.299      0.027     10.938      0.000
+    KO_03_NP           0.208      0.019     10.775      0.000
+    KO_04_NP           0.327      0.026     12.452      0.000
+
+Between Level
+
+ KOB      BY
+    KO_01_NP           0.320      0.191      1.678      0.093
+    KO_02_NP          -0.650      0.082     -7.964      0.000
+    KO_03_NP          -0.429      0.109     -3.917      0.000
+    KO_04_NP          -1.352      0.138     -9.790      0.000
+
+ Intercepts
+    KO_01_NP          29.679     17.505      1.695      0.090
+    KO_02_NP          12.032      1.171     10.273      0.000
+    KO_03_NP          21.658      5.304      4.083      0.000
+    KO_04_NP          12.544      1.321      9.497      0.000
+
+ Variances
+    KOB                1.000      0.000    999.000    999.000
+
+ Residual Variances
+    KO_01_NP           0.898      0.122      7.352      0.000
+    KO_02_NP           0.578      0.106      5.455      0.000
+    KO_03_NP           0.816      0.094      8.687      0.000
+    KO_04_NP         999.000    999.000    999.000    999.000
+
+
+STD Standardization
+
+                                                    Two-Tailed
+                    Estimate       S.E.  Est./S.E.    P-Value
+
+Within Level
+
+ KOW      BY
+    KO_01_NP           0.785      0.019     40.425      0.000
+    KO_02_NP           0.693      0.025     28.153      0.000
+    KO_03_NP           0.742      0.019     39.305      0.000
+    KO_04_NP           0.634      0.024     26.976      0.000
+
+ Variances
+    KOW                1.000      0.000    999.000    999.000
+
+ Residual Variances
+    KO_01_NP           0.208      0.017     12.028      0.000
+    KO_02_NP           0.205      0.017     12.301      0.000
+    KO_03_NP           0.144      0.014     10.534      0.000
+    KO_04_NP           0.196      0.015     12.938      0.000
+
+Between Level
+
+ KOB      BY
+    KO_01_NP           0.031      0.002     13.325      0.000
+    KO_02_NP          -0.175      0.027     -6.617      0.000
+    KO_03_NP          -0.060      0.021     -2.940      0.003
+    KO_04_NP          -0.361      0.029    -12.311      0.000
+
+ Intercepts
+    KO_01_NP           2.881      0.025    116.919      0.000
+    KO_02_NP           3.248      0.025    128.154      0.000
+    KO_03_NP           3.053      0.024    127.155      0.000
+    KO_04_NP           3.351      0.025    135.942      0.000
+
+ Variances
+    KOB                1.000      0.000    999.000    999.000
+
+ Residual Variances
+    KO_01_NP           0.008      0.011      0.762      0.446
+    KO_02_NP           0.042      0.012      3.590      0.000
+    KO_03_NP           0.016      0.008      1.965      0.049
+    KO_04_NP          -0.059    999.000    999.000    999.000
+
+
+R-SQUARE
+
+Within Level
+
+    Observed                                        Two-Tailed
+    Variable        Estimate       S.E.  Est./S.E.    P-Value
+
+    KO_01_NP           0.747      0.021     35.752      0.000
+    KO_02_NP           0.701      0.027     25.583      0.000
+    KO_03_NP           0.792      0.019     41.053      0.000
+    KO_04_NP           0.673      0.026     25.611      0.000
+
+Between Level
+
+    Observed                                        Two-Tailed
+    Variable        Estimate       S.E.  Est./S.E.    P-Value
+
+    KO_01_NP           0.102      0.122      0.839      0.402
+    KO_02_NP           0.422      0.106      3.982      0.000
+    KO_03_NP           0.184      0.094      1.959      0.050
+    KO_04_NP        Undefined   0.18281E+01
+
+
+QUALITY OF NUMERICAL RESULTS
+
+     Condition Number for the Information Matrix             -0.481E-05
+       (ratio of smallest to largest eigenvalue)
+
+
+MODEL MODIFICATION INDICES
+
+NOTE:  Modification indices for direct effects of observed dependent variables
+regressed on covariates may not be included.  To include these, request
+MODINDICES (ALL).
+
+Minimum M.I. value for printing the modification index    10.000
+
+                                   M.I.     E.P.C.  Std E.P.C.  StdYX E.P.C.
+
+Within Level
+
+WITH Statements
+
+KO_03_NP WITH KO_01_NP            18.794     0.074      0.074        0.430
+KO_03_NP WITH KO_02_NP            36.870    -0.091     -0.091       -0.527
+KO_04_NP WITH KO_01_NP            36.870    -0.088     -0.088       -0.435
+KO_04_NP WITH KO_02_NP            18.794     0.056      0.056        0.281
+
+Between Level
+
+BY Statements
+
+KOB      BY KO_01_NP             999.000     0.000      0.000        0.000
+
+ON/BY Statements
+
+KOB      ON KOB      /
+KOB      BY KOB                  999.000     0.000      0.000        0.000
+
+WITH Statements
+
+KO_04_NP WITH KO_02_NP          1032.737    17.541     17.541      999.000
+KO_04_NP WITH KO_03_NP            26.237     0.338      0.338      999.000
+
+
+     Beginning Time:  15:30:02
+        Ending Time:  15:30:15
+       Elapsed Time:  00:00:13
+
+
+
+MUTHEN & MUTHEN
+3463 Stoner Ave.
+Los Angeles, CA  90066
+
+Tel: (310) 391-9971
+Fax: (310) 391-8971
+Web: www.StatModel.com
+Support: Support@StatModel.com
+
+Copyright (c) 1998-2013 Muthen & Muthen

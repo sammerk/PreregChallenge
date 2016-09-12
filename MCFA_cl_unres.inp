@@ -1,0 +1,24 @@
+TITLE:
+MCFA_cl_unres
+DATA:
+FILE = "MCFA_cl_unres.dat";
+ 
+VARIABLE:
+NAMES = cl_01_np cl_02_np cl_03_np IDnum; 
+ MISSING=.;
+ USEVARIABLES = cl_01_np cl_02_np cl_03_np;
+                CLUSTER = IDnum;
+ANALYSIS:
+TYPE = TWOLEVEL;
+MODEL:
+%WITHIN%
+                  clW BY cl_01_np(1)
+                         cl_02_np(2)
+                         cl_03_np(3);
+
+                  %BETWEEN%
+                  clB BY cl_01_np(1)
+                         cl_02_np(2) 
+                         cl_03_np(3);
+OUTPUT:
+Standardized;

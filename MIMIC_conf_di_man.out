@@ -1,0 +1,608 @@
+Mplus VERSION 7.1 (Mac)
+MUTHEN & MUTHEN
+08/30/2016  11:42 AM
+
+INPUT INSTRUCTIONS
+
+  TITLE:
+  MIMIC_conf_di_man
+  DATA:
+  FILE = "MIMIC_conf_di_man.dat";
+
+  VARIABLE:
+  NAMES = I_exp I_wis tp_01_np tp_02_np tp_03_np tp_04_np tp_05_np tp_06_np ke_01_pc
+       di_gc tr_pc di_gc_exp di_gc_wis ko_pc me_np mi_np mb_np IDnum;
+   MISSING=.;
+   USEVARIABLES = tp_01_np tp_02_np tp_03_np tp_04_np
+                  tp_05_np tp_06_np
+                  tr_pc ke_01_pc ko_pc
+                  di_gc di_gc_exp di_gc_wis I_exp I_wis me_np mi_np mb_np;
+
+                  WITHIN =  tr_pc ke_01_pc ko_pc;
+                  BETWEEN = di_gc di_gc_exp di_gc_wis I_exp I_wis me_np mi_np mb_np;
+                  CLUSTER = IDnum;
+  ANALYSIS:
+  TYPE = TWOLEVEL;
+  MODEL:
+  %WITHIN%
+                   TPW BY tp_01_np tp_02_np tp_03_np tp_04_np tp_05_np tp_06_np;
+
+                   TPW ON tr_pc ke_01_pc ko_pc ;
+
+                   %BETWEEN%
+                   TPB BY tp_01_np tp_02_np tp_03_np tp_04_np tp_05_np tp_06_np;
+                   tp_05_np@0;
+                   TPB ON di_gc di_gc_exp di_gc_wis I_exp I_wis me_np mi_np mb_np;
+  OUTPUT:
+  Standardized MODINDICES(5);
+
+
+
+*** WARNING in VARIABLE command
+  Note that only the first 8 characters of variable names are used in the output.
+  Shorten variable names to avoid any confusion.
+*** WARNING
+  Data set contains cases with missing on x-variables.
+  These cases were not included in the analysis.
+  Number of cases with missing on x-variables:  76
+   2 WARNING(S) FOUND IN THE INPUT INSTRUCTIONS
+
+
+
+
+MIMIC_conf_di_man
+
+SUMMARY OF ANALYSIS
+
+Number of groups                                                 1
+Number of observations                                        1384
+
+Number of dependent variables                                    6
+Number of independent variables                                 11
+Number of continuous latent variables                            2
+
+Observed dependent variables
+
+  Continuous
+   TP_01_NP    TP_02_NP    TP_03_NP    TP_04_NP    TP_05_NP    TP_06_NP
+
+Observed independent variables
+   TR_PC       KE_01_PC    KO_PC       DI_GC       DI_GC_EX    DI_GC_WI
+   I_EXP       I_WIS       ME_NP       MI_NP       MB_NP
+
+Continuous latent variables
+   TPW         TPB
+
+Variables with special functions
+
+  Cluster variable      IDNUM
+
+  Within variables
+   TR_PC       KE_01_PC    KO_PC
+
+  Between variables
+   DI_GC       DI_GC_EX    DI_GC_WI    I_EXP       I_WIS       ME_NP
+   MI_NP       MB_NP
+
+
+Estimator                                                      MLR
+Information matrix                                        OBSERVED
+Maximum number of iterations                                   100
+Convergence criterion                                    0.100D-05
+Maximum number of EM iterations                                500
+Convergence criteria for the EM algorithm
+  Loglikelihood change                                   0.100D-02
+  Relative loglikelihood change                          0.100D-05
+  Derivative                                             0.100D-03
+Minimum variance                                         0.100D-03
+Maximum number of steepest descent iterations                   20
+Maximum number of iterations for H1                           2000
+Convergence criterion for H1                             0.100D-03
+Optimization algorithm                                         EMA
+
+Input data file(s)
+  MIMIC_conf_di_man.dat
+Input data format  FREE
+
+
+SUMMARY OF DATA
+
+     Number of missing data patterns            11
+     Number of clusters                        352
+
+     Average cluster size        3.932
+
+     Estimated Intraclass Correlations for the Y Variables
+
+                Intraclass              Intraclass              Intraclass
+     Variable  Correlation   Variable  Correlation   Variable  Correlation
+
+     TP_01_NP     0.278      TP_02_NP     0.239      TP_03_NP     0.267
+     TP_04_NP     0.343      TP_05_NP     0.251      TP_06_NP     0.307
+
+
+
+COVARIANCE COVERAGE OF DATA
+
+Minimum covariance coverage value   0.100
+
+
+     PROPORTION OF DATA PRESENT
+
+
+           Covariance Coverage
+              TP_01_NP      TP_02_NP      TP_03_NP      TP_04_NP      TP_05_NP
+              ________      ________      ________      ________      ________
+ TP_01_NP       0.997
+ TP_02_NP       0.989         0.992
+ TP_03_NP       0.991         0.985         0.993
+ TP_04_NP       0.994         0.989         0.990         0.997
+ TP_05_NP       0.991         0.986         0.987         0.991         0.994
+ TP_06_NP       0.987         0.982         0.983         0.986         0.983
+ TR_PC          0.997         0.992         0.993         0.997         0.994
+ KE_01_PC       0.997         0.992         0.993         0.997         0.994
+ KO_PC          0.997         0.992         0.993         0.997         0.994
+ DI_GC          0.997         0.992         0.993         0.997         0.994
+ DI_GC_EX       0.997         0.992         0.993         0.997         0.994
+ DI_GC_WI       0.997         0.992         0.993         0.997         0.994
+ I_EXP          0.997         0.992         0.993         0.997         0.994
+ I_WIS          0.997         0.992         0.993         0.997         0.994
+ ME_NP          0.997         0.992         0.993         0.997         0.994
+ MI_NP          0.997         0.992         0.993         0.997         0.994
+ MB_NP          0.997         0.992         0.993         0.997         0.994
+
+
+           Covariance Coverage
+              TP_06_NP      TR_PC         KE_01_PC      KO_PC         DI_GC
+              ________      ________      ________      ________      ________
+ TP_06_NP       0.989
+ TR_PC          0.989         1.000
+ KE_01_PC       0.989         1.000         1.000
+ KO_PC          0.989         1.000         1.000         1.000
+ DI_GC          0.989         1.000         1.000         1.000         1.000
+ DI_GC_EX       0.989         1.000         1.000         1.000         1.000
+ DI_GC_WI       0.989         1.000         1.000         1.000         1.000
+ I_EXP          0.989         1.000         1.000         1.000         1.000
+ I_WIS          0.989         1.000         1.000         1.000         1.000
+ ME_NP          0.989         1.000         1.000         1.000         1.000
+ MI_NP          0.989         1.000         1.000         1.000         1.000
+ MB_NP          0.989         1.000         1.000         1.000         1.000
+
+
+           Covariance Coverage
+              DI_GC_EX      DI_GC_WI      I_EXP         I_WIS         ME_NP
+              ________      ________      ________      ________      ________
+ DI_GC_EX       1.000
+ DI_GC_WI       1.000         1.000
+ I_EXP          1.000         1.000         1.000
+ I_WIS          1.000         1.000         1.000         1.000
+ ME_NP          1.000         1.000         1.000         1.000         1.000
+ MI_NP          1.000         1.000         1.000         1.000         1.000
+ MB_NP          1.000         1.000         1.000         1.000         1.000
+
+
+           Covariance Coverage
+              MI_NP         MB_NP
+              ________      ________
+ MI_NP          1.000
+ MB_NP          1.000         1.000
+
+
+
+THE MODEL ESTIMATION TERMINATED NORMALLY
+
+
+
+MODEL FIT INFORMATION
+
+Number of Free Parameters                       40
+
+Loglikelihood
+
+          H0 Value                       -8686.701
+          H0 Scaling Correction Factor      1.2205
+            for MLR
+          H1 Value                       -8608.829
+          H1 Scaling Correction Factor      1.1069
+            for MLR
+
+Information Criteria
+
+          Akaike (AIC)                   17453.402
+          Bayesian (BIC)                 17662.711
+          Sample-Size Adjusted BIC       17535.647
+            (n* = (n + 2) / 24)
+
+Chi-Square Test of Model Fit
+
+          Value                            148.954*
+          Degrees of Freedom                    74
+          P-Value                           0.0000
+          Scaling Correction Factor         1.0456
+            for MLR
+
+*   The chi-square value for MLM, MLMV, MLR, ULSMV, WLSM and WLSMV cannot be used
+    for chi-square difference testing in the regular way.  MLM, MLR and WLSM
+    chi-square difference testing is described on the Mplus website.  MLMV, WLSMV,
+    and ULSMV difference testing is done using the DIFFTEST option.
+
+RMSEA (Root Mean Square Error Of Approximation)
+
+          Estimate                           0.027
+
+CFI/TLI
+
+          CFI                                0.967
+          TLI                                0.957
+
+Chi-Square Test of Model Fit for the Baseline Model
+
+          Value                           2370.904
+          Degrees of Freedom                    96
+          P-Value                           0.0000
+
+SRMR (Standardized Root Mean Square Residual)
+
+          Value for Within                   0.026
+          Value for Between                  0.043
+
+
+
+MODEL RESULTS
+
+                                                    Two-Tailed
+                    Estimate       S.E.  Est./S.E.    P-Value
+
+Within Level
+
+ TPW      BY
+    TP_01_NP           1.000      0.000    999.000    999.000
+    TP_02_NP           0.170      0.068      2.493      0.013
+    TP_03_NP           0.883      0.053     16.524      0.000
+    TP_04_NP           0.614      0.050     12.305      0.000
+    TP_05_NP           0.950      0.063     15.052      0.000
+    TP_06_NP           0.653      0.061     10.725      0.000
+
+ TPW        ON
+    TR_PC             -0.246      0.036     -6.781      0.000
+    KE_01_PC           0.050      0.023      2.148      0.032
+    KO_PC              0.337      0.030     11.412      0.000
+
+ Residual Variances
+    TP_01_NP           0.300      0.022     13.474      0.000
+    TP_02_NP           0.583      0.035     16.843      0.000
+    TP_03_NP           0.213      0.015     14.450      0.000
+    TP_04_NP           0.471      0.026     17.973      0.000
+    TP_05_NP           0.288      0.019     14.859      0.000
+    TP_06_NP           0.305      0.020     15.570      0.000
+    TPW                0.156      0.016      9.723      0.000
+
+Between Level
+
+ TPB      BY
+    TP_01_NP           1.000      0.000    999.000    999.000
+    TP_02_NP           0.599      0.105      5.685      0.000
+    TP_03_NP           0.855      0.064     13.328      0.000
+    TP_04_NP           0.730      0.104      6.986      0.000
+    TP_05_NP           1.126      0.092     12.260      0.000
+    TP_06_NP           1.144      0.091     12.629      0.000
+
+ TPB        ON
+    DI_GC             -0.034      0.055     -0.613      0.540
+    DI_GC_EXP          0.091      0.074      1.232      0.218
+    DI_GC_WIS          0.105      0.071      1.483      0.138
+    I_EXP              0.040      0.054      0.734      0.463
+    I_WIS              0.170      0.056      3.035      0.002
+    ME_NP             -0.179      0.040     -4.496      0.000
+    MI_NP             -0.014      0.037     -0.374      0.708
+    MB_NP             -0.056      0.034     -1.635      0.102
+
+ Intercepts
+    TP_01_NP           3.631      0.102     35.669      0.000
+    TP_02_NP           3.163      0.093     34.029      0.000
+    TP_03_NP           3.638      0.089     40.845      0.000
+    TP_04_NP           2.553      0.105     24.306      0.000
+    TP_05_NP           3.549      0.104     34.042      0.000
+    TP_06_NP           3.663      0.103     35.580      0.000
+
+ Residual Variances
+    TP_01_NP           0.063      0.015      4.111      0.000
+    TP_02_NP           0.135      0.026      5.112      0.000
+    TP_03_NP           0.045      0.011      4.241      0.000
+    TP_04_NP           0.221      0.028      7.891      0.000
+    TP_05_NP           0.000      0.000    999.000    999.000
+    TP_06_NP           0.005      0.011      0.461      0.645
+    TPB                0.097      0.017      5.646      0.000
+
+
+STANDARDIZED MODEL RESULTS
+
+
+STDYX Standardization
+
+                                                    Two-Tailed
+                    Estimate       S.E.  Est./S.E.    P-Value
+
+Within Level
+
+ TPW      BY
+    TP_01_NP           0.674      0.026     26.318      0.000
+    TP_02_NP           0.111      0.043      2.546      0.011
+    TP_03_NP           0.691      0.023     30.607      0.000
+    TP_04_NP           0.408      0.029     14.198      0.000
+    TP_05_NP           0.663      0.028     23.917      0.000
+    TP_06_NP           0.509      0.034     15.029      0.000
+
+ TPW        ON
+    TR_PC             -0.216      0.031     -6.951      0.000
+    KE_01_PC           0.071      0.033      2.172      0.030
+    KO_PC              0.441      0.031     14.243      0.000
+
+ Residual Variances
+    TP_01_NP           0.546      0.035     15.804      0.000
+    TP_02_NP           0.988      0.010    102.758      0.000
+    TP_03_NP           0.522      0.031     16.723      0.000
+    TP_04_NP           0.833      0.023     35.512      0.000
+    TP_05_NP           0.561      0.037     15.259      0.000
+    TP_06_NP           0.741      0.035     21.466      0.000
+    TPW                0.625      0.029     21.703      0.000
+
+Between Level
+
+ TPB      BY
+    TP_01_NP           0.830      0.038     21.879      0.000
+    TP_02_NP           0.519      0.085      6.140      0.000
+    TP_03_NP           0.832      0.041     20.307      0.000
+    TP_04_NP           0.501      0.058      8.610      0.000
+    TP_05_NP           1.000      0.000  30597.143      0.000
+    TP_06_NP           0.986      0.030     32.681      0.000
+
+ TPB        ON
+    DI_GC             -0.066      0.107     -0.613      0.540
+    DI_GC_EXP          0.112      0.091      1.232      0.218
+    DI_GC_WIS          0.116      0.077      1.499      0.134
+    I_EXP              0.050      0.068      0.741      0.459
+    I_WIS              0.217      0.071      3.065      0.002
+    ME_NP             -0.397      0.075     -5.317      0.000
+    MI_NP             -0.027      0.074     -0.372      0.710
+    MB_NP             -0.126      0.075     -1.684      0.092
+
+ Intercepts
+    TP_01_NP           8.095      0.540     14.986      0.000
+    TP_02_NP           7.362      0.548     13.440      0.000
+    TP_03_NP           9.507      0.564     16.843      0.000
+    TP_04_NP           4.705      0.260     18.112      0.000
+    TP_05_NP           8.460      0.454     18.650      0.000
+    TP_06_NP           8.475      0.462     18.361      0.000
+
+ Residual Variances
+    TP_01_NP           0.311      0.063      4.935      0.000
+    TP_02_NP           0.731      0.088      8.332      0.000
+    TP_03_NP           0.308      0.068      4.527      0.000
+    TP_04_NP           0.749      0.058     12.854      0.000
+    TP_05_NP           0.001      0.000      8.698      0.000
+    TP_06_NP           0.028      0.060      0.466      0.641
+    TPB                0.698      0.056     12.386      0.000
+
+
+STDY Standardization
+
+                                                    Two-Tailed
+                    Estimate       S.E.  Est./S.E.    P-Value
+
+Within Level
+
+ TPW      BY
+    TP_01_NP           0.674      0.026     26.318      0.000
+    TP_02_NP           0.111      0.043      2.546      0.011
+    TP_03_NP           0.691      0.023     30.607      0.000
+    TP_04_NP           0.408      0.029     14.198      0.000
+    TP_05_NP           0.663      0.028     23.917      0.000
+    TP_06_NP           0.509      0.034     15.029      0.000
+
+ TPW        ON
+    TR_PC             -0.493      0.070     -6.987      0.000
+    KE_01_PC           0.100      0.046      2.174      0.030
+    KO_PC              0.674      0.047     14.421      0.000
+
+ Residual Variances
+    TP_01_NP           0.546      0.035     15.804      0.000
+    TP_02_NP           0.988      0.010    102.758      0.000
+    TP_03_NP           0.522      0.031     16.723      0.000
+    TP_04_NP           0.833      0.023     35.512      0.000
+    TP_05_NP           0.561      0.037     15.259      0.000
+    TP_06_NP           0.741      0.035     21.466      0.000
+    TPW                0.625      0.029     21.703      0.000
+
+Between Level
+
+ TPB      BY
+    TP_01_NP           0.830      0.038     21.879      0.000
+    TP_02_NP           0.519      0.085      6.140      0.000
+    TP_03_NP           0.832      0.041     20.307      0.000
+    TP_04_NP           0.501      0.058      8.610      0.000
+    TP_05_NP           1.000      0.000  30597.143      0.000
+    TP_06_NP           0.986      0.030     32.681      0.000
+
+ TPB        ON
+    DI_GC             -0.091      0.148     -0.613      0.540
+    DI_GC_EXP          0.245      0.198      1.233      0.218
+    DI_GC_WIS          0.281      0.187      1.501      0.133
+    I_EXP              0.107      0.145      0.741      0.458
+    I_WIS              0.457      0.148      3.084      0.002
+    ME_NP             -0.480      0.089     -5.370      0.000
+    MI_NP             -0.037      0.100     -0.372      0.710
+    MB_NP             -0.150      0.089     -1.687      0.092
+
+ Intercepts
+    TP_01_NP           8.095      0.540     14.986      0.000
+    TP_02_NP           7.362      0.548     13.440      0.000
+    TP_03_NP           9.507      0.564     16.843      0.000
+    TP_04_NP           4.705      0.260     18.112      0.000
+    TP_05_NP           8.460      0.454     18.650      0.000
+    TP_06_NP           8.475      0.462     18.361      0.000
+
+ Residual Variances
+    TP_01_NP           0.311      0.063      4.935      0.000
+    TP_02_NP           0.731      0.088      8.332      0.000
+    TP_03_NP           0.308      0.068      4.527      0.000
+    TP_04_NP           0.749      0.058     12.854      0.000
+    TP_05_NP           0.001      0.000      8.698      0.000
+    TP_06_NP           0.028      0.060      0.466      0.641
+    TPB                0.698      0.056     12.386      0.000
+
+
+STD Standardization
+
+                                                    Two-Tailed
+                    Estimate       S.E.  Est./S.E.    P-Value
+
+Within Level
+
+ TPW      BY
+    TP_01_NP           0.500      0.024     20.440      0.000
+    TP_02_NP           0.085      0.033      2.552      0.011
+    TP_03_NP           0.442      0.022     20.148      0.000
+    TP_04_NP           0.307      0.024     12.687      0.000
+    TP_05_NP           0.475      0.025     18.889      0.000
+    TP_06_NP           0.327      0.025     12.940      0.000
+
+ TPW        ON
+    TR_PC             -0.493      0.070     -6.987      0.000
+    KE_01_PC           0.100      0.046      2.174      0.030
+    KO_PC              0.674      0.047     14.421      0.000
+
+ Residual Variances
+    TP_01_NP           0.300      0.022     13.474      0.000
+    TP_02_NP           0.583      0.035     16.843      0.000
+    TP_03_NP           0.213      0.015     14.450      0.000
+    TP_04_NP           0.471      0.026     17.973      0.000
+    TP_05_NP           0.288      0.019     14.859      0.000
+    TP_06_NP           0.305      0.020     15.570      0.000
+    TPW                0.625      0.029     21.703      0.000
+
+Between Level
+
+ TPB      BY
+    TP_01_NP           0.372      0.033     11.255      0.000
+    TP_02_NP           0.223      0.040      5.511      0.000
+    TP_03_NP           0.318      0.028     11.398      0.000
+    TP_04_NP           0.272      0.039      6.974      0.000
+    TP_05_NP           0.419      0.024     17.386      0.000
+    TP_06_NP           0.426      0.026     16.370      0.000
+
+ TPB        ON
+    DI_GC             -0.091      0.148     -0.613      0.540
+    DI_GC_EXP          0.245      0.198      1.233      0.218
+    DI_GC_WIS          0.281      0.187      1.501      0.133
+    I_EXP              0.107      0.145      0.741      0.458
+    I_WIS              0.457      0.148      3.084      0.002
+    ME_NP             -0.480      0.089     -5.370      0.000
+    MI_NP             -0.037      0.100     -0.372      0.710
+    MB_NP             -0.150      0.089     -1.687      0.092
+
+ Intercepts
+    TP_01_NP           3.631      0.102     35.669      0.000
+    TP_02_NP           3.163      0.093     34.029      0.000
+    TP_03_NP           3.638      0.089     40.845      0.000
+    TP_04_NP           2.553      0.105     24.306      0.000
+    TP_05_NP           3.549      0.104     34.042      0.000
+    TP_06_NP           3.663      0.103     35.580      0.000
+
+ Residual Variances
+    TP_01_NP           0.063      0.015      4.111      0.000
+    TP_02_NP           0.135      0.026      5.112      0.000
+    TP_03_NP           0.045      0.011      4.241      0.000
+    TP_04_NP           0.221      0.028      7.891      0.000
+    TP_05_NP           0.000      0.000    999.000    999.000
+    TP_06_NP           0.005      0.011      0.461      0.645
+    TPB                0.698      0.056     12.386      0.000
+
+
+R-SQUARE
+
+Within Level
+
+    Observed                                        Two-Tailed
+    Variable        Estimate       S.E.  Est./S.E.    P-Value
+
+    TP_01_NP           0.454      0.035     13.159      0.000
+    TP_02_NP           0.012      0.010      1.273      0.203
+    TP_03_NP           0.478      0.031     15.304      0.000
+    TP_04_NP           0.167      0.023      7.099      0.000
+    TP_05_NP           0.439      0.037     11.958      0.000
+    TP_06_NP           0.259      0.035      7.515      0.000
+
+     Latent                                         Two-Tailed
+    Variable        Estimate       S.E.  Est./S.E.    P-Value
+
+    TPW                0.375      0.029     13.044      0.000
+
+Between Level
+
+    Observed                                        Two-Tailed
+    Variable        Estimate       S.E.  Est./S.E.    P-Value
+
+    TP_01_NP           0.689      0.063     10.939      0.000
+    TP_02_NP           0.269      0.088      3.070      0.002
+    TP_03_NP           0.692      0.068     10.154      0.000
+    TP_04_NP           0.251      0.058      4.305      0.000
+    TP_05_NP           0.999      0.000   ********      0.000
+    TP_06_NP           0.972      0.060     16.340      0.000
+
+     Latent                                         Two-Tailed
+    Variable        Estimate       S.E.  Est./S.E.    P-Value
+
+    TPB                0.302      0.056      5.367      0.000
+
+
+QUALITY OF NUMERICAL RESULTS
+
+     Condition Number for the Information Matrix              0.331E-03
+       (ratio of smallest to largest eigenvalue)
+
+
+MODEL MODIFICATION INDICES
+
+NOTE:  Modification indices for direct effects of observed dependent variables
+regressed on covariates may not be included.  To include these, request
+MODINDICES (ALL).
+
+Minimum M.I. value for printing the modification index     5.000
+
+                                   M.I.     E.P.C.  Std E.P.C.  StdYX E.P.C.
+
+Within Level
+
+WITH Statements
+
+TP_05_NP WITH TP_02_NP             8.641     0.041      0.041        0.100
+TP_06_NP WITH TP_01_NP            12.752    -0.041     -0.041       -0.135
+TP_06_NP WITH TP_05_NP            17.240     0.046      0.046        0.156
+
+Between Level
+
+WITH Statements
+
+TP_03_NP WITH TP_01_NP             7.826     0.023      0.023        0.428
+TP_04_NP WITH TP_02_NP             5.338    -0.041     -0.041       -0.235
+TP_05_NP WITH TP_03_NP             5.088    -0.015     -0.015       -7.238
+TP_05_NP WITH TP_04_NP             9.897     0.034      0.034        7.285
+
+
+     Beginning Time:  11:42:48
+        Ending Time:  11:42:53
+       Elapsed Time:  00:00:05
+
+
+
+MUTHEN & MUTHEN
+3463 Stoner Ave.
+Los Angeles, CA  90066
+
+Tel: (310) 391-9971
+Fax: (310) 391-8971
+Web: www.StatModel.com
+Support: Support@StatModel.com
+
+Copyright (c) 1998-2013 Muthen & Muthen

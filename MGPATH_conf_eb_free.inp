@@ -1,0 +1,37 @@
+TITLE:
+MIMIC_pred_free_man
+DATA:
+FILE = "MGPATH_conf_eb_free.dat";
+ 
+VARIABLE:
+NAMES = I_exp I_wis tp_01_np tp_02_np tp_03_np tp_04_np tp_05_np tp_06_np ke_01_pc
+     tr_pc abf_gc ref_gc pof_gc abf_gc_exp ref_gc_exp pof_gc_exp abf_gc_wis
+     ref_gc_wis pof_gc_wis cl_pc ie_pc ko_pc me_np mi_np mb_np si_np IDnum; 
+ MISSING=.;
+ USEVARIABLES = tp_01_np tp_02_np tp_03_np tp_04_np 
+                tp_05_np tp_06_np
+                tr_pc ke_01_pc  cl_pc  ie_pc  ko_pc 
+                abf_gc ref_gc pof_gc abf_gc_exp ref_gc_exp pof_gc_exp abf_gc_wis 
+                ref_gc_wis pof_gc_wis I_exp I_wis me_np mi_np mb_np si_np;
+
+                WITHIN =  tr_pc ke_01_pc  cl_pc  ie_pc  ko_pc ;
+                BETWEEN =  abf_gc ref_gc pof_gc abf_gc_exp ref_gc_exp pof_gc_exp abf_gc_wis 
+                           ref_gc_wis pof_gc_wis I_exp I_wis me_np mi_np mb_np si_np;
+                CLUSTER = IDnum;
+ANALYSIS:
+TYPE = TWOLEVEL;
+MODEL:
+%WITHIN%
+                 TPW BY tp_01_np tp_02_np tp_03_np tp_04_np tp_05_np tp_06_np;
+                 TPW ON tr_pc ke_01_pc  cl_pc  ie_pc  ko_pc ;
+
+                 %BETWEEN%
+                 TPB BY tp_01_np tp_02_np tp_03_np tp_04_np tp_05_np tp_06_np;
+                 tp_05_np@0;
+                 TPB ON abf_gc ref_gc pof_gc abf_gc_exp ref_gc_exp pof_gc_exp abf_gc_wis 
+                        ref_gc_wis pof_gc_wis I_exp I_wis me_np mi_np mb_np si_np;
+   
+   
+   
+OUTPUT:
+Standardized MODINDICES(5);

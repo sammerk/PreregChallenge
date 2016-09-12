@@ -1,0 +1,33 @@
+TITLE:
+MCFA_tp_res
+DATA:
+FILE = "MCFA_tp_res.dat";
+ 
+VARIABLE:
+NAMES = tp_01_np tp_02_np tp_03_np tp_04_np tp_05_np tp_06_np IDnum; 
+ MISSING=.;
+ USEVARIABLES = tp_01_np tp_02_np tp_03_np tp_04_np 
+                tp_05_np tp_06_np;
+   
+                CLUSTER = IDnum;
+ANALYSIS:
+TYPE = TWOLEVEL;
+MODEL:
+%WITHIN%
+                 TPW BY tp_01_np(01)
+   	                    tp_02_np(02)
+   	                    tp_03_np(03)
+   	                    tp_04_np(04)
+                        tp_05_np(05)
+                        tp_06_np(06);
+           
+   
+                  %BETWEEN%
+                  TPB BY tp_01_np(01)
+   	                     tp_02_np(02)
+   	                     tp_03_np(03)
+   	                     tp_04_np(04)
+                         tp_05_np(05)
+                         tp_06_np(06);
+OUTPUT:
+Standardized Modindices(5);

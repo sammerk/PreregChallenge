@@ -1,0 +1,22 @@
+TITLE:
+MCFA_tr_unres
+DATA:
+FILE = "MCFA_tr_unres.dat";
+ 
+VARIABLE:
+NAMES = tr_01_np tr_02_np tr_03_np tr_04_np IDnum; 
+ MISSING=.;
+ USEVARIABLES = tr_01_np tr_02_np tr_03_np tr_04_np;
+                     CLUSTER = IDnum;
+ANALYSIS:
+TYPE = TWOLEVEL;
+MODEL:
+%WITHIN%
+                    trW BY tr_01_np tr_02_np tr_03_np tr_04_np;
+        
+                    %BETWEEN%
+                    trB BY tr_01_np tr_02_np tr_03_np tr_04_np;
+                           TR_03_NP WITH TR_01_NP;
+                           TR_04_NP WITH TR_02_NP; 
+OUTPUT:
+Standardized; MODINDICES

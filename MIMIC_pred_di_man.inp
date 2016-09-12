@@ -1,0 +1,30 @@
+TITLE:
+MIMIC_pred_di_man
+DATA:
+FILE = "MIMIC_pred_di_man.dat";
+ 
+VARIABLE:
+NAMES = I_exp I_wis tp_01_np tp_02_np tp_03_np tp_04_np tp_05_np tp_06_np di_gc
+     tr_pc di_gc_exp di_gc_wis IDnum; 
+ MISSING=.;
+ USEVARIABLES = tp_01_np tp_02_np tp_03_np tp_04_np 
+                tp_05_np tp_06_np
+                tr_pc
+                di_gc di_gc_exp di_gc_wis I_exp I_wis;
+
+                WITHIN = tr_pc;
+                BETWEEN = di_gc di_gc_exp di_gc_wis I_exp I_wis;
+                CLUSTER = IDnum;
+ANALYSIS:
+TYPE = TWOLEVEL;
+MODEL:
+%WITHIN%
+                 TPW BY tp_01_np tp_02_np tp_03_np tp_04_np tp_05_np tp_06_np;
+                 TPW ON tr_pc;
+
+                 %BETWEEN%
+                 TPB BY tp_01_np tp_02_np tp_03_np tp_04_np tp_05_np tp_06_np;
+                 tp_05_np@0;
+                 TPB ON di_gc di_gc_exp di_gc_wis I_exp I_wis;
+OUTPUT:
+Standardized MODINDICES(5);

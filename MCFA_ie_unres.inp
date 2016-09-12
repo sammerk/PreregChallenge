@@ -1,0 +1,23 @@
+TITLE:
+MCFA_ie_unres
+DATA:
+FILE = "MCFA_ie_unres.dat";
+ 
+VARIABLE:
+NAMES = ie_01_np ie_02_np ie_03_np ie_04_np ie_05_np IDnum; 
+ MISSING=.;
+ USEVARIABLES = ie_01_np ie_02_np ie_03_np ie_04_np
+                                    ie_05_np;
+                     CLUSTER = IDnum;
+ANALYSIS:
+TYPE = TWOLEVEL;
+MODEL:
+%WITHIN%
+                    ieW BY ie_01_np ie_02_np ie_03_np ie_04_np
+                           ie_05_np;
+        
+                    %BETWEEN%
+                    ieB BY ie_01_np ie_02_np ie_03_np ie_04_np
+                           ie_05_np; 
+OUTPUT:
+Standardized;

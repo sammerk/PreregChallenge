@@ -1,0 +1,27 @@
+TITLE:
+MCFA_ko_unres
+DATA:
+FILE = "MCFA_ko_unres.dat";
+ 
+VARIABLE:
+NAMES = ko_01_np ko_02_np ko_03_np ko_04_np IDnum; 
+ MISSING=.;
+ USEVARIABLES = ko_01_np ko_02_np ko_03_np ko_04_np;
+                     CLUSTER = IDnum;
+ANALYSIS:
+TYPE = TWOLEVEL;
+                STARTS = 100 10;
+MODEL:
+%WITHIN%
+                    koW BY ko_01_np
+                           ko_02_np
+                           ko_03_np
+                           ko_04_np;
+                    %Between%
+                    koB BY ko_01_np
+                           ko_02_np
+                           ko_03_np
+                           ko_04_np;
+
+OUTPUT:
+Standardized; Modindices

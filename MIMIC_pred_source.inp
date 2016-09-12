@@ -1,0 +1,25 @@
+TITLE:
+MIMIC_pred_source
+DATA:
+FILE = "MIMIC_pred_source.dat";
+ 
+VARIABLE:
+NAMES = I_exp I_wis tp_01_np tp_02_np tp_03_np tp_04_np tp_05_np tp_06_np IDnum; 
+ MISSING=.;
+ USEVARIABLES = tp_01_np tp_02_np tp_03_np tp_04_np 
+                tp_05_np tp_06_np I_exp I_wis;
+
+                BETWEEN = I_exp I_wis;
+                CLUSTER = IDnum;
+ANALYSIS:
+TYPE = TWOLEVEL;
+MODEL:
+%WITHIN%
+                 TPW BY tp_01_np tp_02_np tp_03_np tp_04_np tp_05_np tp_06_np;
+
+                 %BETWEEN%
+                 TPB BY tp_01_np tp_02_np tp_03_np tp_04_np tp_05_np tp_06_np;
+                 tp_06_np@0;
+                 TPB ON I_exp I_wis;
+OUTPUT:
+Standardized MODINDICES(5);

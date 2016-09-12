@@ -1,0 +1,25 @@
+TITLE:
+MGMCFA_tp_strong
+DATA:
+FILE = "MGMCFA_tp_strong.dat";
+ 
+VARIABLE:
+NAMES = tp_01_np tp_02_np tp_03_np tp_04_np tp_05_np tp_06_np source IDnum
+     sourcenum; 
+ MISSING=.;
+ USEVARIABLES = tp_01_np tp_02_np tp_03_np tp_04_np 
+                tp_05_np tp_06_np;
+                GROUPING IS sourcenum (1 = erf 2 = exp 3 = wis);
+                CLUSTER = IDnum;
+ANALYSIS:
+TYPE = TWOLEVEL;
+MODEL:
+%WITHIN%
+                 TPW BY tp_01_np tp_02_np tp_03_np tp_04_np tp_05_np tp_06_np;
+   
+                 %BETWEEN%
+                 TPB BY tp_01_np tp_02_np tp_03_np tp_04_np tp_05_np tp_06_np;
+   
+                 tp_06_np@0   ;
+OUTPUT:
+Standardized MODINDICES(5);

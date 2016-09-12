@@ -1,0 +1,24 @@
+TITLE:
+MCFA_ko_within
+DATA:
+FILE = "MCFA_ko_within.dat";
+ 
+VARIABLE:
+NAMES = ko_01_np ko_02_np ko_03_np IDnum; 
+ MISSING=.;
+ USEVARIABLES = ko_01_np ko_02_np ko_03_np;
+               
+                     CLUSTER = IDnum;
+ANALYSIS:
+TYPE = TWOLEVEL;
+MODEL:
+%WITHIN%
+                    koW BY ko_01_np(1)
+                           ko_02_np(1)
+                           ko_03_np(1);
+
+                    %Between%
+                    ko_01_np WITH ko_02_np ko_03_np;
+                    ko_02_np WITH ko_03_np; 
+OUTPUT:
+Standardized; Modindices

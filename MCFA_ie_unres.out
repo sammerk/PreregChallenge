@@ -1,0 +1,439 @@
+Mplus VERSION 7.1 (Mac)
+MUTHEN & MUTHEN
+08/30/2016  10:18 AM
+
+INPUT INSTRUCTIONS
+
+  TITLE:
+  MCFA_ie_unres
+  DATA:
+  FILE = "MCFA_ie_unres.dat";
+
+  VARIABLE:
+  NAMES = ie_01_np ie_02_np ie_03_np ie_04_np ie_05_np IDnum;
+   MISSING=.;
+   USEVARIABLES = ie_01_np ie_02_np ie_03_np ie_04_np
+                                      ie_05_np;
+                       CLUSTER = IDnum;
+  ANALYSIS:
+  TYPE = TWOLEVEL;
+  MODEL:
+  %WITHIN%
+                      ieW BY ie_01_np ie_02_np ie_03_np ie_04_np
+                             ie_05_np;
+
+                      %BETWEEN%
+                      ieB BY ie_01_np ie_02_np ie_03_np ie_04_np
+                             ie_05_np;
+  OUTPUT:
+  Standardized;
+
+
+
+*** WARNING
+  Data set contains cases with missing on all variables.
+  These cases were not included in the analysis.
+  Number of cases with missing on all variables:  18
+   1 WARNING(S) FOUND IN THE INPUT INSTRUCTIONS
+
+
+
+
+MCFA_ie_unres
+
+SUMMARY OF ANALYSIS
+
+Number of groups                                                 1
+Number of observations                                        1442
+
+Number of dependent variables                                    5
+Number of independent variables                                  0
+Number of continuous latent variables                            2
+
+Observed dependent variables
+
+  Continuous
+   IE_01_NP    IE_02_NP    IE_03_NP    IE_04_NP    IE_05_NP
+
+Continuous latent variables
+   IEW         IEB
+
+Variables with special functions
+
+  Cluster variable      IDNUM
+
+Estimator                                                      MLR
+Information matrix                                        OBSERVED
+Maximum number of iterations                                   100
+Convergence criterion                                    0.100D-05
+Maximum number of EM iterations                                500
+Convergence criteria for the EM algorithm
+  Loglikelihood change                                   0.100D-02
+  Relative loglikelihood change                          0.100D-05
+  Derivative                                             0.100D-03
+Minimum variance                                         0.100D-03
+Maximum number of steepest descent iterations                   20
+Maximum number of iterations for H1                           2000
+Convergence criterion for H1                             0.100D-03
+Optimization algorithm                                         EMA
+
+Input data file(s)
+  MCFA_ie_unres.dat
+Input data format  FREE
+
+
+SUMMARY OF DATA
+
+     Number of missing data patterns            15
+     Number of clusters                        363
+
+     Average cluster size        3.972
+
+     Estimated Intraclass Correlations for the Y Variables
+
+                Intraclass              Intraclass              Intraclass
+     Variable  Correlation   Variable  Correlation   Variable  Correlation
+
+     IE_01_NP     0.381      IE_02_NP     0.455      IE_03_NP     0.352
+     IE_04_NP     0.481      IE_05_NP     0.457
+
+
+
+COVARIANCE COVERAGE OF DATA
+
+Minimum covariance coverage value   0.100
+
+
+     PROPORTION OF DATA PRESENT
+
+
+           Covariance Coverage
+              IE_01_NP      IE_02_NP      IE_03_NP      IE_04_NP      IE_05_NP
+              ________      ________      ________      ________      ________
+ IE_01_NP       0.994
+ IE_02_NP       0.986         0.990
+ IE_03_NP       0.983         0.981         0.988
+ IE_04_NP       0.985         0.984         0.980         0.990
+ IE_05_NP       0.987         0.983         0.981         0.983         0.991
+
+
+
+THE MODEL ESTIMATION TERMINATED NORMALLY
+
+     WARNING:  THE RESIDUAL COVARIANCE MATRIX (THETA) IS NOT POSITIVE DEFINITE.
+     THIS COULD INDICATE A NEGATIVE VARIANCE/RESIDUAL VARIANCE FOR AN OBSERVED
+     VARIABLE, A CORRELATION GREATER OR EQUAL TO ONE BETWEEN TWO OBSERVED
+     VARIABLES, OR A LINEAR DEPENDENCY AMONG MORE THAN TWO OBSERVED VARIABLES.
+     CHECK THE RESULTS SECTION FOR MORE INFORMATION.
+
+
+
+MODEL FIT INFORMATION
+
+Number of Free Parameters                       25
+
+Loglikelihood
+
+          H0 Value                       -9827.368
+          H0 Scaling Correction Factor      1.5783
+            for MLR
+          H1 Value                       -9770.897
+          H1 Scaling Correction Factor      1.4506
+            for MLR
+
+Information Criteria
+
+          Akaike (AIC)                   19704.736
+          Bayesian (BIC)                 19836.580
+          Sample-Size Adjusted BIC       19757.164
+            (n* = (n + 2) / 24)
+
+Chi-Square Test of Model Fit
+
+          Value                             99.814*
+          Degrees of Freedom                    10
+          P-Value                           0.0000
+          Scaling Correction Factor         1.1315
+            for MLR
+
+*   The chi-square value for MLM, MLMV, MLR, ULSMV, WLSM and WLSMV cannot be used
+    for chi-square difference testing in the regular way.  MLM, MLR and WLSM
+    chi-square difference testing is described on the Mplus website.  MLMV, WLSMV,
+    and ULSMV difference testing is done using the DIFFTEST option.
+
+RMSEA (Root Mean Square Error Of Approximation)
+
+          Estimate                           0.079
+
+CFI/TLI
+
+          CFI                                0.949
+          TLI                                0.899
+
+Chi-Square Test of Model Fit for the Baseline Model
+
+          Value                           1797.461
+          Degrees of Freedom                    20
+          P-Value                           0.0000
+
+SRMR (Standardized Root Mean Square Residual)
+
+          Value for Within                   0.040
+          Value for Between                  0.099
+
+
+
+MODEL RESULTS
+
+                                                    Two-Tailed
+                    Estimate       S.E.  Est./S.E.    P-Value
+
+Within Level
+
+ IEW      BY
+    IE_01_NP           1.000      0.000    999.000    999.000
+    IE_02_NP           1.325      0.056     23.722      0.000
+    IE_03_NP           0.959      0.065     14.680      0.000
+    IE_04_NP           0.533      0.052     10.340      0.000
+    IE_05_NP           0.502      0.074      6.796      0.000
+
+ Variances
+    IEW                0.503      0.050     10.022      0.000
+
+ Residual Variances
+    IE_01_NP           0.522      0.030     17.415      0.000
+    IE_02_NP           0.177      0.032      5.477      0.000
+    IE_03_NP           0.728      0.047     15.504      0.000
+    IE_04_NP           0.418      0.041     10.282      0.000
+    IE_05_NP           0.680      0.056     12.127      0.000
+
+Between Level
+
+ IEB      BY
+    IE_01_NP           1.000      0.000    999.000    999.000
+    IE_02_NP           1.090      0.043     25.462      0.000
+    IE_03_NP           0.658      0.070      9.417      0.000
+    IE_04_NP           0.360      0.053      6.856      0.000
+    IE_05_NP           0.366      0.077      4.759      0.000
+
+ Intercepts
+    IE_01_NP           2.954      0.049     59.747      0.000
+    IE_02_NP           3.153      0.056     55.902      0.000
+    IE_03_NP           3.892      0.051     75.997      0.000
+    IE_04_NP           1.710      0.043     39.968      0.000
+    IE_05_NP           4.839      0.049     98.079      0.000
+
+ Variances
+    IEB                0.682      0.072      9.437      0.000
+
+ Residual Variances
+    IE_01_NP          -0.053      0.024     -2.208      0.027
+    IE_02_NP           0.078      0.027      2.848      0.004
+    IE_03_NP           0.349      0.052      6.678      0.000
+    IE_04_NP           0.437      0.051      8.602      0.000
+    IE_05_NP           0.578      0.058      9.878      0.000
+
+
+STANDARDIZED MODEL RESULTS
+
+
+STDYX Standardization
+
+                                                    Two-Tailed
+                    Estimate       S.E.  Est./S.E.    P-Value
+
+Within Level
+
+ IEW      BY
+    IE_01_NP           0.700      0.022     32.520      0.000
+    IE_02_NP           0.913      0.017     52.320      0.000
+    IE_03_NP           0.623      0.029     21.490      0.000
+    IE_04_NP           0.505      0.033     15.101      0.000
+    IE_05_NP           0.396      0.053      7.482      0.000
+
+ Variances
+    IEW                1.000      0.000    999.000    999.000
+
+ Residual Variances
+    IE_01_NP           0.510      0.030     16.893      0.000
+    IE_02_NP           0.167      0.032      5.251      0.000
+    IE_03_NP           0.612      0.036     16.913      0.000
+    IE_04_NP           0.745      0.034     22.074      0.000
+    IE_05_NP           0.843      0.042     20.097      0.000
+
+Between Level
+
+ IEB      BY
+    IE_01_NP           1.041      0.019     55.488      0.000
+    IE_02_NP           0.955      0.016     57.884      0.000
+    IE_03_NP           0.676      0.053     12.648      0.000
+    IE_04_NP           0.410      0.053      7.785      0.000
+    IE_05_NP           0.369      0.069      5.323      0.000
+
+ Intercepts
+    IE_01_NP           3.726      0.217     17.206      0.000
+    IE_02_NP           3.347      0.174     19.239      0.000
+    IE_03_NP           4.850      0.331     14.652      0.000
+    IE_04_NP           2.360      0.106     22.225      0.000
+    IE_05_NP           5.916      0.345     17.146      0.000
+
+ Variances
+    IEB                1.000      0.000    999.000    999.000
+
+ Residual Variances
+    IE_01_NP          -0.084    999.000    999.000    999.000
+    IE_02_NP           0.088      0.032      2.799      0.005
+    IE_03_NP           0.542      0.072      7.496      0.000
+    IE_04_NP           0.832      0.043     19.246      0.000
+    IE_05_NP           0.864      0.051     16.839      0.000
+
+
+STDY Standardization
+
+                                                    Two-Tailed
+                    Estimate       S.E.  Est./S.E.    P-Value
+
+Within Level
+
+ IEW      BY
+    IE_01_NP           0.700      0.022     32.520      0.000
+    IE_02_NP           0.913      0.017     52.320      0.000
+    IE_03_NP           0.623      0.029     21.490      0.000
+    IE_04_NP           0.505      0.033     15.101      0.000
+    IE_05_NP           0.396      0.053      7.482      0.000
+
+ Variances
+    IEW                1.000      0.000    999.000    999.000
+
+ Residual Variances
+    IE_01_NP           0.510      0.030     16.893      0.000
+    IE_02_NP           0.167      0.032      5.251      0.000
+    IE_03_NP           0.612      0.036     16.913      0.000
+    IE_04_NP           0.745      0.034     22.074      0.000
+    IE_05_NP           0.843      0.042     20.097      0.000
+
+Between Level
+
+ IEB      BY
+    IE_01_NP           1.041      0.019     55.488      0.000
+    IE_02_NP           0.955      0.016     57.884      0.000
+    IE_03_NP           0.676      0.053     12.648      0.000
+    IE_04_NP           0.410      0.053      7.785      0.000
+    IE_05_NP           0.369      0.069      5.323      0.000
+
+ Intercepts
+    IE_01_NP           3.726      0.217     17.206      0.000
+    IE_02_NP           3.347      0.174     19.239      0.000
+    IE_03_NP           4.850      0.331     14.652      0.000
+    IE_04_NP           2.360      0.106     22.225      0.000
+    IE_05_NP           5.916      0.345     17.146      0.000
+
+ Variances
+    IEB                1.000      0.000    999.000    999.000
+
+ Residual Variances
+    IE_01_NP         999.000    999.000    999.000    999.000
+    IE_02_NP           0.088      0.032      2.799      0.005
+    IE_03_NP           0.542      0.072      7.496      0.000
+    IE_04_NP           0.832      0.043     19.246      0.000
+    IE_05_NP           0.864      0.051     16.839      0.000
+
+
+STD Standardization
+
+                                                    Two-Tailed
+                    Estimate       S.E.  Est./S.E.    P-Value
+
+Within Level
+
+ IEW      BY
+    IE_01_NP           0.709      0.035     20.043      0.000
+    IE_02_NP           0.940      0.037     25.421      0.000
+    IE_03_NP           0.680      0.042     16.382      0.000
+    IE_04_NP           0.378      0.037     10.336      0.000
+    IE_05_NP           0.356      0.051      7.025      0.000
+
+ Variances
+    IEW                1.000      0.000    999.000    999.000
+
+ Residual Variances
+    IE_01_NP           0.522      0.030     17.415      0.000
+    IE_02_NP           0.177      0.032      5.477      0.000
+    IE_03_NP           0.728      0.047     15.504      0.000
+    IE_04_NP           0.418      0.041     10.282      0.000
+    IE_05_NP           0.680      0.056     12.127      0.000
+
+Between Level
+
+ IEB      BY
+    IE_01_NP           0.826      0.044     18.874      0.000
+    IE_02_NP           0.900      0.049     18.210      0.000
+    IE_03_NP           0.543      0.064      8.544      0.000
+    IE_04_NP           0.297      0.043      6.854      0.000
+    IE_05_NP           0.302      0.065      4.663      0.000
+
+ Intercepts
+    IE_01_NP           2.954      0.049     59.747      0.000
+    IE_02_NP           3.153      0.056     55.902      0.000
+    IE_03_NP           3.892      0.051     75.997      0.000
+    IE_04_NP           1.710      0.043     39.968      0.000
+    IE_05_NP           4.839      0.049     98.079      0.000
+
+ Variances
+    IEB                1.000      0.000    999.000    999.000
+
+ Residual Variances
+    IE_01_NP          -0.053    999.000    999.000    999.000
+    IE_02_NP           0.078      0.027      2.848      0.004
+    IE_03_NP           0.349      0.052      6.678      0.000
+    IE_04_NP           0.437      0.051      8.602      0.000
+    IE_05_NP           0.578      0.058      9.878      0.000
+
+
+R-SQUARE
+
+Within Level
+
+    Observed                                        Two-Tailed
+    Variable        Estimate       S.E.  Est./S.E.    P-Value
+
+    IE_01_NP           0.490      0.030     16.260      0.000
+    IE_02_NP           0.833      0.032     26.160      0.000
+    IE_03_NP           0.388      0.036     10.745      0.000
+    IE_04_NP           0.255      0.034      7.551      0.000
+    IE_05_NP           0.157      0.042      3.741      0.000
+
+Between Level
+
+    Observed                                        Two-Tailed
+    Variable        Estimate       S.E.  Est./S.E.    P-Value
+
+    IE_01_NP        Undefined   0.10840E+01
+    IE_02_NP           0.912      0.032     28.942      0.000
+    IE_03_NP           0.458      0.072      6.324      0.000
+    IE_04_NP           0.168      0.043      3.892      0.000
+    IE_05_NP           0.136      0.051      2.662      0.008
+
+
+QUALITY OF NUMERICAL RESULTS
+
+     Condition Number for the Information Matrix              0.367E-02
+       (ratio of smallest to largest eigenvalue)
+
+
+     Beginning Time:  10:18:22
+        Ending Time:  10:18:22
+       Elapsed Time:  00:00:00
+
+
+
+MUTHEN & MUTHEN
+3463 Stoner Ave.
+Los Angeles, CA  90066
+
+Tel: (310) 391-9971
+Fax: (310) 391-8971
+Web: www.StatModel.com
+Support: Support@StatModel.com
+
+Copyright (c) 1998-2013 Muthen & Muthen
