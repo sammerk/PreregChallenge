@@ -213,6 +213,14 @@ rawdata_long_np$sourcenum <- as.numeric(as.factor(rawdata_long_np$source))  ## C
 
 
 
+# Sample description
+## Sample size
+```{r}
+
+```
+
+
+
 # Instruments
 The questionaire contained between-person level variables (asked every student teacher once) as well as within-person level variables (asked each student teacher once per topic). The follwing code describes the (multi-level) confirmatory factor analyses (MCFA), which allowed us to also report estimations of reliability using McDonalds ω [@Dunn2013]. Therefore we first specified so called "independent clusters model of confirmatory factor analysis (ICM-CFA)". If the model fit was lower then our criteria, we estimated measurement error covariances (within on factor and choosen by modification indices) freely.  
 Details about multi-level confirmatory factor analyses are given in the methods section of the corresponding article.
@@ -298,6 +306,7 @@ rpf_bv <- function(x){
          )
 }
 ```
+
 
 ## Perceived Theory-Practice-Integration
 ### MCFA
