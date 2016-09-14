@@ -33,4 +33,4 @@ MODEL:
    
    
 OUTPUT:
-Standardized MODINDICES(5);
+Standardized CINTERVAL MODINDICES(5);

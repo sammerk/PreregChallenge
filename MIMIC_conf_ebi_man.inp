@@ -32,4 +32,4 @@ MODEL:
                  TPB ON abs_gc rel_gc abs_gc_exp rel_gc_exp abs_gc_wis rel_gc_wis
                         I_exp I_wis me_np mi_np mb_np;
 OUTPUT:
-Standardized MODINDICES(5);
+Standardized CINTERVAL MODINDICES(5);

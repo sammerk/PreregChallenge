@@ -740,152 +740,10 @@ meti.cfa.fitted &lt;- cfa(meti.cfa.model, data = rawdata_np)</code></pre>
 <div id="results" class="section level1">
 <h1>Results</h1>
 <p>This sections provides the code and output of the analyses we conducted to investigate our hypotheses. Note that the heading the same than in the corresponding article.</p>
-<div id="confirmatory-factor-analysis" class="section level2">
-<h2>Confirmatory Factor Analysis</h2>
-<div id="m1-mcfa-with-level-variant-measurement-models" class="section level3">
-<h3>M1: MCFA with level-variant measurement models</h3>
-<pre class="r"><code>MCFA_tp_unres &lt;- mplusObject(
-  
-   TITLE =  &quot;MCFA__tp_unres&quot;,
-   
-   ANALYSIS =  &quot;TYPE = TWOLEVEL;&quot;,
-    
-   VARIABLE =  &quot;USEVARIABLES = tp_01_np tp_02_np tp_03_np tp_04_np 
-                tp_05_np tp_06_np;
-   
-                CLUSTER = IDnum;&quot;,
-   
-
-   MODEL =      &quot;%WITHIN%
-                 TPW BY tp_01_np
-                        tp_02_np
-                        tp_03_np
-                        tp_04_np
-                        tp_05_np
-                        tp_06_np;
-           
-   
-                  %BETWEEN%
-                  TPB BY tp_01_np
-                         tp_02_np
-                         tp_03_np
-                         tp_04_np
-                         tp_05_np
-                         tp_06_np;&quot;,
-   OUTPUT = &quot;Standardized;&quot;,
-   rdata = rawdata_long_np)
-
-MCFA_tp_unres_fit &lt;- mplusModeler(MCFA_tp_unres, &quot;MCFA_tp_unres.dat&quot;, run = 1)</code></pre>
-<ul>
-<li>The fitindices of M1 were χ² = 58.674, <em>df</em> = 18, CFI = 0.974, TLI = 0.956, RMSEA = 0.04, SRMR<sub>within</sub> = 0.024, SRMR<sub>between</sub> = 0.062<br />
-</li>
-<li>An estimation of ICC(1)-coeffients resulted in a range of 0.21 and 0.33.</li>
-</ul>
-</div>
-<div id="m2-mcfa-with-level-invariant-measurement-models" class="section level3">
-<h3>M2: MCFA with level-invariant measurement models</h3>
-<pre class="r"><code># Mplusmodell
-MCFA_tp_res &lt;- mplusObject(
-  
-   TITLE =  &quot;MCFA_tp_res&quot;,
-   
-   ANALYSIS =  &quot;TYPE = TWOLEVEL;&quot;,
-    
-   VARIABLE =  &quot;USEVARIABLES = tp_01_np tp_02_np tp_03_np tp_04_np 
-                tp_05_np tp_06_np;
-   
-                CLUSTER = IDnum;&quot;,
-   
-
-   MODEL =      &quot;%WITHIN%
-                 TPW BY tp_01_np(01)
-                        tp_02_np(02)
-                        tp_03_np(03)
-                        tp_04_np(04)
-                        tp_05_np(05)
-                        tp_06_np(06);
-           
-   
-                  %BETWEEN%
-                  TPB BY tp_01_np(01)
-                         tp_02_np(02)
-                         tp_03_np(03)
-                         tp_04_np(04)
-                         tp_05_np(05)
-                         tp_06_np(06);&quot;,
-   
-   OUTPUT = &quot;Standardized Modindices(5);&quot;,
-   
-   rdata = rawdata_long_np)
-
-MCFA_tp_res_fit &lt;- mplusModeler(MCFA_tp_res, &quot;MCFA_tp_res.dat&quot;, run = 1)</code></pre>
-<ul>
-<li>The fitindices of M2 were χ² = 93.76, <em>df</em> = 23, CFI = 0.955, TLI = 0.941, RMSEA = 0.046, SRMR<sub>within</sub> = 0.037, SRMR<sub>between</sub> = 0.12)</li>
-<li>A modelcomparison test resulted in:</li>
-</ul>
-<pre class="r"><code>compareModels(readModels(&quot;MCFA_tp_unres.out&quot;), readModels(&quot;MCFA_tp_res.out&quot;), diffTest = T, show = &quot;summaries&quot;)</code></pre>
-<pre><code>## 
-## ==============
-## 
-## Mplus model comparison
-## ----------------------
-## 
-## Reading model:  MCFA_tp_unres.out 
-## ------
-## Model 1:  MCFA_tp_unres.out 
-## Reading model:  MCFA_tp_res.out 
-## Model 2:  MCFA_tp_res.out 
-## ------
-## 
-## Model Summary Comparison
-## ------------------------
-## 
-##                m1             m2         
-## Title          MCFA__tp_unres MCFA_tp_res
-## Observations   1443           1443       
-## Estimator      MLR            MLR        
-## Parameters     30             25         
-## LL             -9368.382      -9389.009  
-## AIC            18796.764      18828.017  
-## BIC            18954.998      18959.879  
-## ChiSqM_Value   58.674         93.76      
-## ChiSqM_DF      18             23         
-## CFI            0.974          0.955      
-## TLI            0.956          0.941      
-## RMSEA_Estimate 0.04           0.046      
-## 
-##   MLR Chi-Square Difference Test for Nested Models Based on Loglikelihood
-##   -----------------------------------------------------------------------
-## 
-##   Difference Test Scaling Correction:  1.2534 
-##   Chi-square difference:  32.9137 
-##   Diff degrees of freedom:  5 
-##   P-value:  0 
-## 
-##   Note: The chi-square difference test assumes that these models are nested.
-##   It is up to you to verify this assumption.
-## 
-##   MLR Chi-Square Difference test for nested models
-##   --------------------------------------------
-## 
-##   Difference Test Scaling Correction: 1.25316 
-##   Chi-square difference: 32.9217 
-##   Diff degrees of freedom: 5 
-##   P-value: 0 
-## 
-## Note: The chi-square difference test assumes that these models are nested.
-##   It is up to you to verify this assumption.
-## 
-## ==============</code></pre>
-<ul>
-<li>The ICC of the latent variable was 0.36</li>
-</ul>
-</div>
-</div>
 <div id="predictive-effects-of-source-h1" class="section level2">
 <h2>Predictive Effects of Source (H1)</h2>
-<div id="m3-multi-group-mcfa-model" class="section level3">
-<h3>M3: Multi-Group MCFA Model</h3>
+<div id="m1-multi-group-mcfa-model" class="section level3">
+<h3>M1: Multi-Group MCFA Model</h3>
 <pre class="r"><code>### MGMCFA Modell _____________________________________________________________________
 
 MGMCFA_tp_strong &lt;- mplusObject(
@@ -913,11 +771,11 @@ MGMCFA_tp_strong &lt;- mplusObject(
 
 MGMCFA_tp_strong_fit &lt;- mplusModeler(MGMCFA_tp_strong, &quot;MGMCFA_tp_strong.dat&quot;, run = 1)</code></pre>
 <ul>
-<li>The fitindices of M3 were: χ² = 166.282, <em>df</em> = 87, CFI = 0.954, TLI = 0.952, RMSEA = 0.044, SRMR<sub>within</sub> = 0.042, SRMR<sub>between</sub> = 0.131</li>
+<li>The fitindices of M1 were: χ² = 166.282, <em>df</em> = 87, CFI = 0.954, TLI = 0.952, RMSEA = 0.044, SRMR<sub>within</sub> = 0.042, SRMR<sub>between</sub> = 0.131</li>
 </ul>
 </div>
-<div id="m4-mimic-model-with-source-indicator-variables-as-predictors" class="section level3">
-<h3>M4: MIMIC Model with source indicator variables as predictors</h3>
+<div id="m2-mimic-model-with-source-indicator-variables-as-predictors" class="section level3">
+<h3>M2: MIMIC Model with source indicator variables as predictors</h3>
 <pre class="r"><code># Dummyvariables for MIMIC Model 
 rawdata_long_np$I_exp &lt;- ifelse(rawdata_long_np$source == &quot;exp&quot;, 1, 0)
 rawdata_long_np$I_wis &lt;- ifelse(rawdata_long_np$source == &quot;wis&quot;, 1, 0)
@@ -946,20 +804,107 @@ MIMIC_pred_source &lt;- mplusObject(
                  tp_06_np@0;
                  TPB ON I_exp I_wis;&quot;,
    
-   OUTPUT = &quot;Standardized MODINDICES(5);&quot;,
+   OUTPUT = &quot;Standardized CINTERVAL MODINDICES(5);&quot;,
    
    rdata = rawdata_long_np)
 
 MIMIC_pred_source_fit &lt;- mplusModeler(MIMIC_pred_source, &quot;MIMIC_pred_source.dat&quot;, run = 1)</code></pre>
 <ul>
-<li>The fitindices of M4 were: χ² = 85.644, <em>df</em> = 29, CFI = 0.966, TLI = 0.951, RMSEA = 0.037, SRMR<sub>within</sub> = 0.025, SRMR<sub>between</sub> = 0.066</li>
+<li>The fitindices of M2 were: χ² = 85.644, <em>df</em> = 29, CFI = 0.966, TLI = 0.951, RMSEA = 0.037, SRMR<sub>within</sub> = 0.025, SRMR<sub>between</sub> = 0.066</li>
+<li>The standardized (stdy) predictive effects of M2 were:</li>
 </ul>
+<pre class="r"><code>MIMIC_pred_source_results &lt;- readModels(&quot;MIMIC_pred_source.out&quot;)</code></pre>
+<p>Reading model: MIMIC_pred_source.out</p>
+<pre class="r"><code>pander::pander(MIMIC_pred_source_results$parameters$stdy.standardized%&gt;% filter(grepl(&quot;ON&quot;, paramHeader)))</code></pre>
+<table style="width:90%;">
+<colgroup>
+<col width="19%"></col>
+<col width="11%"></col>
+<col width="8%"></col>
+<col width="8%"></col>
+<col width="12%"></col>
+<col width="9%"></col>
+<col width="20%"></col>
+</colgroup>
+<thead>
+<tr class="header">
+<th align="center">paramHeader</th>
+<th align="center">param</th>
+<th align="center">est</th>
+<th align="center">se</th>
+<th align="center">est_se</th>
+<th align="center">pval</th>
+<th align="center">BetweenWithin</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="center">TPB.ON</td>
+<td align="center">I_EXP</td>
+<td align="center">0.085</td>
+<td align="center">0.164</td>
+<td align="center">0.522</td>
+<td align="center">0.602</td>
+<td align="center">Between</td>
+</tr>
+<tr class="even">
+<td align="center">TPB.ON</td>
+<td align="center">I_WIS</td>
+<td align="center">0.635</td>
+<td align="center">0.154</td>
+<td align="center">4.118</td>
+<td align="center">0</td>
+<td align="center">Between</td>
+</tr>
+</tbody>
+</table>
+<pre class="r"><code>pander::pander(MIMIC_pred_source_results$parameters$ci.stdy.standardized %&gt;% 
+                 filter(grepl(&quot;ON&quot;, paramHeader)) %&gt;% 
+                 dplyr::select(-low.5, -low2.5, -up.5, -up2.5))</code></pre>
+<table style="width:78%;">
+<colgroup>
+<col width="19%"></col>
+<col width="11%"></col>
+<col width="9%"></col>
+<col width="8%"></col>
+<col width="8%"></col>
+<col width="20%"></col>
+</colgroup>
+<thead>
+<tr class="header">
+<th align="center">paramHeader</th>
+<th align="center">param</th>
+<th align="center">low5</th>
+<th align="center">est</th>
+<th align="center">up5</th>
+<th align="center">BetweenWithin</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="center">TPB.ON</td>
+<td align="center">I_EXP</td>
+<td align="center">-0.184</td>
+<td align="center">0.085</td>
+<td align="center">0.355</td>
+<td align="center">Between</td>
+</tr>
+<tr class="even">
+<td align="center">TPB.ON</td>
+<td align="center">I_WIS</td>
+<td align="center">0.381</td>
+<td align="center">0.635</td>
+<td align="center">0.889</td>
+<td align="center">Between</td>
+</tr>
+</tbody>
+</table>
 </div>
 </div>
 <div id="predictive-effects-of-epistemic-beliefs-h2" class="section level2">
 <h2>Predictive Effects of epistemic beliefs (H2)</h2>
-<div id="m5-predictive-effects-of-d-index" class="section level3">
-<h3>M5: Predictive Effects of D-Index</h3>
+<div id="m3-predictive-effects-of-d-index" class="section level3">
+<h3>M3: Predictive Effects of D-Index</h3>
 <pre class="r"><code>rawdata_long_np &lt;-
   rawdata_long_np%&gt;%
     mutate(di_gc = scale(rowMeans(data.frame(di_01_np, di_02_np, di_03_np, di_04_np, di_05_np, 
@@ -999,18 +944,19 @@ MIMIC_pred_di_man &lt;- mplusObject(
                  tp_05_np@0;
                  TPB ON di_gc di_gc_exp di_gc_wis I_exp I_wis;&quot;,
    
-   OUTPUT = &quot;Standardized MODINDICES(5);&quot;,
+   OUTPUT = &quot;Standardized CINTERVAL MODINDICES(5);&quot;,
    
    rdata = rawdata_long_np)
 
 MIMIC_pred_di_man_fit &lt;- mplusModeler(MIMIC_pred_di_man, &quot;MIMIC_pred_di_man.dat&quot;, run = 1)</code></pre>
 <ul>
-<li>The fitindices of M5 were: χ² = 112.246, <em>df</em> = 49, CFI = 0.968, TLI = 0.956, RMSEA = 0.03, SRMR<sub>within</sub> = 0.024, SRMR<sub>between</sub> = 0.055</li>
-<li>The standardized predictive effects of M5 were:</li>
+<li>The fitindices of M3 were: χ² = 112.246, <em>df</em> = 49, CFI = 0.968, TLI = 0.956, RMSEA = 0.03, SRMR<sub>within</sub> = 0.024, SRMR<sub>between</sub> = 0.055</li>
+<li>The standardized predictive effects of M3 were:</li>
 </ul>
 <pre class="r"><code>MIMIC_pred_di_man_results &lt;- readModels(&quot;MIMIC_pred_di_man.out&quot;)</code></pre>
 <p>Reading model: MIMIC_pred_di_man.out</p>
-<pre class="r"><code>pander::pander(MIMIC_pred_di_man_results$parameters$stdyx.standardized%&gt;% filter(grepl(&quot;ON&quot;, paramHeader)))</code></pre>
+<pre class="r"><code>pander::pander(MIMIC_pred_di_man_results$parameters$stdyx.standardized %&gt;% 
+                 filter(grepl(&quot;ON&quot;, paramHeader), !grepl(&quot;I_EXP&quot;, param), !grepl(&quot;I_WIS&quot;, param)))</code></pre>
 <table style="width:94%;">
 <colgroup>
 <col width="19%"></col>
@@ -1069,11 +1015,37 @@ MIMIC_pred_di_man_fit &lt;- mplusModeler(MIMIC_pred_di_man, &quot;MIMIC_pred_di_
 <td align="center">0.056</td>
 <td align="center">Between</td>
 </tr>
+</tbody>
+</table>
+<pre class="r"><code>pander::pander(MIMIC_pred_di_man_results$parameters$stdy.standardized %&gt;% 
+                 filter(grepl(&quot;ON&quot;, paramHeader), grepl(&quot;I_EXP&quot;, param) | grepl(&quot;I_WIS&quot;, param)))</code></pre>
+<table style="width:90%;">
+<colgroup>
+<col width="19%"></col>
+<col width="11%"></col>
+<col width="8%"></col>
+<col width="8%"></col>
+<col width="12%"></col>
+<col width="9%"></col>
+<col width="20%"></col>
+</colgroup>
+<thead>
+<tr class="header">
+<th align="center">paramHeader</th>
+<th align="center">param</th>
+<th align="center">est</th>
+<th align="center">se</th>
+<th align="center">est_se</th>
+<th align="center">pval</th>
+<th align="center">BetweenWithin</th>
+</tr>
+</thead>
+<tbody>
 <tr class="odd">
 <td align="center">TPB.ON</td>
 <td align="center">I_EXP</td>
-<td align="center">0.027</td>
-<td align="center">0.075</td>
+<td align="center">0.058</td>
+<td align="center">0.159</td>
 <td align="center">0.363</td>
 <td align="center">0.717</td>
 <td align="center">Between</td>
@@ -1081,17 +1053,118 @@ MIMIC_pred_di_man_fit &lt;- mplusModeler(MIMIC_pred_di_man, &quot;MIMIC_pred_di_
 <tr class="even">
 <td align="center">TPB.ON</td>
 <td align="center">I_WIS</td>
-<td align="center">0.284</td>
-<td align="center">0.073</td>
-<td align="center">3.894</td>
+<td align="center">0.599</td>
+<td align="center">0.152</td>
+<td align="center">3.93</td>
 <td align="center">0</td>
 <td align="center">Between</td>
 </tr>
 </tbody>
 </table>
+<ul>
+<li>The standardized confidence intervals of M3 were</li>
+</ul>
+<pre class="r"><code>pander::pander(MIMIC_pred_di_man_results$parameters$ci.stdyx.standardized %&gt;% 
+                 filter(grepl(&quot;ON&quot;, paramHeader), !grepl(&quot;I_EXP&quot;, param), !grepl(&quot;I_WIS&quot;, param)) %&gt;% 
+                 select(-low.5, -low5, -up.5, -up5))</code></pre>
+<table style="width:88%;">
+<colgroup>
+<col width="19%"></col>
+<col width="13%"></col>
+<col width="12%"></col>
+<col width="9%"></col>
+<col width="11%"></col>
+<col width="20%"></col>
+</colgroup>
+<thead>
+<tr class="header">
+<th align="center">paramHeader</th>
+<th align="center">param</th>
+<th align="center">low2.5</th>
+<th align="center">est</th>
+<th align="center">up2.5</th>
+<th align="center">BetweenWithin</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="center">TPW.ON</td>
+<td align="center">TR_PC</td>
+<td align="center">-0.489</td>
+<td align="center">-0.432</td>
+<td align="center">-0.375</td>
+<td align="center">Within</td>
+</tr>
+<tr class="even">
+<td align="center">TPB.ON</td>
+<td align="center">DI_GC</td>
+<td align="center">-0.254</td>
+<td align="center">-0.037</td>
+<td align="center">0.181</td>
+<td align="center">Between</td>
+</tr>
+<tr class="odd">
+<td align="center">TPB.ON</td>
+<td align="center">DI_GC_EXP</td>
+<td align="center">-0.055</td>
+<td align="center">0.138</td>
+<td align="center">0.331</td>
+<td align="center">Between</td>
+</tr>
+<tr class="even">
+<td align="center">TPB.ON</td>
+<td align="center">DI_GC_WIS</td>
+<td align="center">-0.004</td>
+<td align="center">0.15</td>
+<td align="center">0.305</td>
+<td align="center">Between</td>
+</tr>
+</tbody>
+</table>
+<pre class="r"><code>pander::pander(MIMIC_pred_di_man_results$parameters$ci.stdy.standardized %&gt;% 
+                 filter(grepl(&quot;ON&quot;, paramHeader), grepl(&quot;I_EXP&quot;, param) | grepl(&quot;I_WIS&quot;, param)) %&gt;% 
+                 dplyr::select(-low.5, -low5, -up.5, -up5))</code></pre>
+<table style="width:83%;">
+<colgroup>
+<col width="19%"></col>
+<col width="11%"></col>
+<col width="12%"></col>
+<col width="8%"></col>
+<col width="11%"></col>
+<col width="20%"></col>
+</colgroup>
+<thead>
+<tr class="header">
+<th align="center">paramHeader</th>
+<th align="center">param</th>
+<th align="center">low2.5</th>
+<th align="center">est</th>
+<th align="center">up2.5</th>
+<th align="center">BetweenWithin</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="center">TPB.ON</td>
+<td align="center">I_EXP</td>
+<td align="center">-0.254</td>
+<td align="center">0.058</td>
+<td align="center">0.37</td>
+<td align="center">Between</td>
+</tr>
+<tr class="even">
+<td align="center">TPB.ON</td>
+<td align="center">I_WIS</td>
+<td align="center">0.3</td>
+<td align="center">0.599</td>
+<td align="center">0.898</td>
+<td align="center">Between</td>
+</tr>
+</tbody>
+</table>
 </div>
-<div id="m6-predictive-effects-of-ebi" class="section level3">
-<h3>M6: Predictive Effects of EBI</h3>
+<div id="m4-predictive-effects-of-ebi" class="section level3">
+<h3>M4: Predictive Effects of EBI</h3>
 <pre class="r"><code>rawdata_long_np &lt;-
   rawdata_long_np%&gt;%
     mutate(abs_gc = scale(rowMeans(data.frame(stab_a_27, stab_a_41, rech_a_03, rech_a_06, rech_a_10, komp_a_07,
@@ -1139,17 +1212,18 @@ MIMIC_pred_ebi_man &lt;- mplusObject(
    
    
    &quot;,
-   OUTPUT = &quot;Standardized MODINDICES(5);&quot;,
+   OUTPUT = &quot;Standardized CINTERVAL MODINDICES(5);&quot;,
    rdata = rawdata_long_np)
 
 MIMIC_pred_ebi_man_fit &lt;- mplusModeler(MIMIC_pred_ebi_man, &quot;MIMIC_pred_ebi_man.dat&quot;, run = 1)</code></pre>
 <ul>
-<li>The fitindices of M6 were: χ² = 148.461, <em>df</em> = 64, CFI = 0.957, TLI = 0.944, RMSEA = 0.03, SRMR<sub>within</sub> = 0.024, SRMR<sub>between</sub> = 0.057</li>
-<li>The standardized predictive effects of M6 were:</li>
+<li>The fitindices of M4 were: χ² = 148.461, <em>df</em> = 64, CFI = 0.957, TLI = 0.944, RMSEA = 0.03, SRMR<sub>within</sub> = 0.024, SRMR<sub>between</sub> = 0.057</li>
+<li>The standardized predictive effects of M4 were:</li>
 </ul>
 <pre class="r"><code>MIMIC_pred_ebi_man_results &lt;- readModels(&quot;MIMIC_pred_ebi_man.out&quot;)</code></pre>
 <p>Reading model: MIMIC_pred_ebi_man.out</p>
-<pre class="r"><code>pander::pander(MIMIC_pred_ebi_man_results$parameters$stdyx.standardized%&gt;% filter(grepl(&quot;ON&quot;, paramHeader)))</code></pre>
+<pre class="r"><code>pander::pander(MIMIC_pred_ebi_man_results$parameters$stdyx.standardized %&gt;% 
+                 filter(grepl(&quot;ON&quot;, paramHeader), !grepl(&quot;I_EXP&quot;, param), !grepl(&quot;I_WIS&quot;, param)))</code></pre>
 <table style="width:96%;">
 <colgroup>
 <col width="19%"></col>
@@ -1235,22 +1309,173 @@ MIMIC_pred_ebi_man_fit &lt;- mplusModeler(MIMIC_pred_ebi_man, &quot;MIMIC_pred_e
 <td align="center">0.434</td>
 <td align="center">Between</td>
 </tr>
-<tr class="even">
+</tbody>
+</table>
+<pre class="r"><code>pander::pander(MIMIC_pred_ebi_man_results$parameters$stdy.standardized %&gt;% 
+                 filter(grepl(&quot;ON&quot;, paramHeader), grepl(&quot;I_EXP&quot;, param) | grepl(&quot;I_WIS&quot;, param)))</code></pre>
+<table style="width:90%;">
+<colgroup>
+<col width="19%"></col>
+<col width="11%"></col>
+<col width="8%"></col>
+<col width="8%"></col>
+<col width="12%"></col>
+<col width="9%"></col>
+<col width="20%"></col>
+</colgroup>
+<thead>
+<tr class="header">
+<th align="center">paramHeader</th>
+<th align="center">param</th>
+<th align="center">est</th>
+<th align="center">se</th>
+<th align="center">est_se</th>
+<th align="center">pval</th>
+<th align="center">BetweenWithin</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
 <td align="center">TPB.ON</td>
 <td align="center">I_EXP</td>
-<td align="center">0.055</td>
-<td align="center">0.072</td>
+<td align="center">0.116</td>
+<td align="center">0.153</td>
 <td align="center">0.76</td>
-<td align="center">0.448</td>
+<td align="center">0.447</td>
+<td align="center">Between</td>
+</tr>
+<tr class="even">
+<td align="center">TPB.ON</td>
+<td align="center">I_WIS</td>
+<td align="center">0.593</td>
+<td align="center">0.154</td>
+<td align="center">3.863</td>
+<td align="center">0</td>
+<td align="center">Between</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>The standardized confidence intervals of M4 were</li>
+</ul>
+<pre class="r"><code>pander::pander(MIMIC_pred_ebi_man_results$parameters$ci.stdyx.standardized %&gt;% 
+                 filter(grepl(&quot;ON&quot;, paramHeader), !grepl(&quot;I_EXP&quot;, param), !grepl(&quot;I_WIS&quot;, param)) %&gt;% 
+                 select(-low.5, -low5, -up.5, -up5))</code></pre>
+<table style="width:89%;">
+<colgroup>
+<col width="19%"></col>
+<col width="15%"></col>
+<col width="12%"></col>
+<col width="9%"></col>
+<col width="11%"></col>
+<col width="20%"></col>
+</colgroup>
+<thead>
+<tr class="header">
+<th align="center">paramHeader</th>
+<th align="center">param</th>
+<th align="center">low2.5</th>
+<th align="center">est</th>
+<th align="center">up2.5</th>
+<th align="center">BetweenWithin</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="center">TPW.ON</td>
+<td align="center">TR_PC</td>
+<td align="center">-0.478</td>
+<td align="center">-0.42</td>
+<td align="center">-0.363</td>
+<td align="center">Within</td>
+</tr>
+<tr class="even">
+<td align="center">TPB.ON</td>
+<td align="center">ABS_GC</td>
+<td align="center">0.235</td>
+<td align="center">0.467</td>
+<td align="center">0.7</td>
 <td align="center">Between</td>
 </tr>
 <tr class="odd">
 <td align="center">TPB.ON</td>
+<td align="center">REL_GC</td>
+<td align="center">-0.068</td>
+<td align="center">0.138</td>
+<td align="center">0.344</td>
+<td align="center">Between</td>
+</tr>
+<tr class="even">
+<td align="center">TPB.ON</td>
+<td align="center">ABS_GC_EXP</td>
+<td align="center">-0.324</td>
+<td align="center">-0.132</td>
+<td align="center">0.059</td>
+<td align="center">Between</td>
+</tr>
+<tr class="odd">
+<td align="center">TPB.ON</td>
+<td align="center">REL_GC_EXP</td>
+<td align="center">-0.123</td>
+<td align="center">0.05</td>
+<td align="center">0.223</td>
+<td align="center">Between</td>
+</tr>
+<tr class="even">
+<td align="center">TPB.ON</td>
+<td align="center">ABS_GC_WIS</td>
+<td align="center">-0.425</td>
+<td align="center">-0.234</td>
+<td align="center">-0.042</td>
+<td align="center">Between</td>
+</tr>
+<tr class="odd">
+<td align="center">TPB.ON</td>
+<td align="center">REL_GC_WIS</td>
+<td align="center">-0.233</td>
+<td align="center">-0.067</td>
+<td align="center">0.1</td>
+<td align="center">Between</td>
+</tr>
+</tbody>
+</table>
+<pre class="r"><code>pander::pander(MIMIC_pred_ebi_man_results$parameters$ci.stdy.standardized %&gt;% 
+                 filter(grepl(&quot;ON&quot;, paramHeader), grepl(&quot;I_EXP&quot;, param) | grepl(&quot;I_WIS&quot;, param)) %&gt;% 
+                 dplyr::select(-low.5, -low5, -up.5, -up5))</code></pre>
+<table style="width:83%;">
+<colgroup>
+<col width="19%"></col>
+<col width="11%"></col>
+<col width="12%"></col>
+<col width="8%"></col>
+<col width="11%"></col>
+<col width="20%"></col>
+</colgroup>
+<thead>
+<tr class="header">
+<th align="center">paramHeader</th>
+<th align="center">param</th>
+<th align="center">low2.5</th>
+<th align="center">est</th>
+<th align="center">up2.5</th>
+<th align="center">BetweenWithin</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="center">TPB.ON</td>
+<td align="center">I_EXP</td>
+<td align="center">-0.184</td>
+<td align="center">0.116</td>
+<td align="center">0.417</td>
+<td align="center">Between</td>
+</tr>
+<tr class="even">
+<td align="center">TPB.ON</td>
 <td align="center">I_WIS</td>
-<td align="center">0.28</td>
-<td align="center">0.073</td>
-<td align="center">3.829</td>
-<td align="center">0</td>
+<td align="center">0.292</td>
+<td align="center">0.593</td>
+<td align="center">0.895</td>
 <td align="center">Between</td>
 </tr>
 </tbody>
@@ -1259,8 +1484,8 @@ MIMIC_pred_ebi_man_fit &lt;- mplusModeler(MIMIC_pred_ebi_man, &quot;MIMIC_pred_e
 </div>
 <div id="confounders-of-predictive-effects-of-epistemic-beliefs" class="section level2">
 <h2>Confounders of Predictive Effects of epistemic beliefs</h2>
-<div id="m7-confounders-of-predictive-effects-d-index-h3" class="section level3">
-<h3>M7: Confounders of Predictive Effects D-Index (H3)</h3>
+<div id="m5-confounders-of-predictive-effects-d-index-h3" class="section level3">
+<h3>M5: Confounders of Predictive Effects D-Index (H3)</h3>
 <pre class="r"><code>### Generate arithemtic means of scales  _____________________________________________________________________
 rawdata_long_np &lt;- rawdata_long_np%&gt;%
   mutate(cl_pc = rowMeans(data.frame(cl_01_pc, cl_02_pc, cl_03_pc), na.rm = T),
@@ -1303,18 +1528,19 @@ MIMIC_conf_di_man &lt;- mplusObject(
                  tp_05_np@0;
                  TPB ON di_gc di_gc_exp di_gc_wis I_exp I_wis me_np mi_np mb_np; &quot;,
    
-   OUTPUT = &quot;Standardized MODINDICES(5);&quot;,
+   OUTPUT = &quot;Standardized CINTERVAL MODINDICES(5);&quot;,
    
    rdata = rawdata_long_np)
 
 MIMIC_conf_di_man_fit &lt;- mplusModeler(MIMIC_conf_di_man, &quot;MIMIC_conf_di_man.dat&quot;, run = 1)</code></pre>
 <ul>
-<li>The fitindices of M7 were: χ² = 148.954, <em>df</em> = 74, CFI = 0.967, TLI = 0.957, RMSEA = 0.027, SRMR<sub>within</sub> = 0.026, SRMR<sub>between</sub> = 0.043</li>
-<li>The standardized predictive effects of M7 were:</li>
+<li>The fitindices of M5 were: χ² = 148.954, <em>df</em> = 74, CFI = 0.967, TLI = 0.957, RMSEA = 0.027, SRMR<sub>within</sub> = 0.026, SRMR<sub>between</sub> = 0.043</li>
+<li>The standardized predictive effects of M5 were:</li>
 </ul>
 <pre class="r"><code>MIMIC_conf_di_man_results &lt;- readModels(&quot;MIMIC_conf_di_man.out&quot;)</code></pre>
 <p>Reading model: MIMIC_conf_di_man.out</p>
-<pre class="r"><code>pander::pander(MIMIC_conf_di_man_results$parameters$stdyx.standardized%&gt;% filter(grepl(&quot;ON&quot;, paramHeader)))</code></pre>
+<pre class="r"><code>pander::pander(MIMIC_conf_di_man_results$parameters$stdyx.standardized %&gt;% 
+                 filter(grepl(&quot;ON&quot;, paramHeader), !grepl(&quot;I_EXP&quot;, param), !grepl(&quot;I_WIS&quot;, param)))</code></pre>
 <table style="width:94%;">
 <colgroup>
 <col width="19%"></col>
@@ -1393,24 +1619,6 @@ MIMIC_conf_di_man_fit &lt;- mplusModeler(MIMIC_conf_di_man, &quot;MIMIC_conf_di_
 </tr>
 <tr class="odd">
 <td align="center">TPB.ON</td>
-<td align="center">I_EXP</td>
-<td align="center">0.05</td>
-<td align="center">0.068</td>
-<td align="center">0.741</td>
-<td align="center">0.459</td>
-<td align="center">Between</td>
-</tr>
-<tr class="even">
-<td align="center">TPB.ON</td>
-<td align="center">I_WIS</td>
-<td align="center">0.217</td>
-<td align="center">0.071</td>
-<td align="center">3.065</td>
-<td align="center">0.002</td>
-<td align="center">Between</td>
-</tr>
-<tr class="odd">
-<td align="center">TPB.ON</td>
 <td align="center">ME_NP</td>
 <td align="center">-0.397</td>
 <td align="center">0.075</td>
@@ -1438,9 +1646,194 @@ MIMIC_conf_di_man_fit &lt;- mplusModeler(MIMIC_conf_di_man, &quot;MIMIC_conf_di_
 </tr>
 </tbody>
 </table>
+<pre class="r"><code>pander::pander(MIMIC_conf_di_man_results$parameters$stdy.standardized %&gt;% 
+                 filter(grepl(&quot;ON&quot;, paramHeader), grepl(&quot;I_EXP&quot;, param) | grepl(&quot;I_WIS&quot;, param)))</code></pre>
+<table style="width:90%;">
+<colgroup>
+<col width="19%"></col>
+<col width="11%"></col>
+<col width="8%"></col>
+<col width="8%"></col>
+<col width="12%"></col>
+<col width="9%"></col>
+<col width="20%"></col>
+</colgroup>
+<thead>
+<tr class="header">
+<th align="center">paramHeader</th>
+<th align="center">param</th>
+<th align="center">est</th>
+<th align="center">se</th>
+<th align="center">est_se</th>
+<th align="center">pval</th>
+<th align="center">BetweenWithin</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="center">TPB.ON</td>
+<td align="center">I_EXP</td>
+<td align="center">0.107</td>
+<td align="center">0.145</td>
+<td align="center">0.741</td>
+<td align="center">0.458</td>
+<td align="center">Between</td>
+</tr>
+<tr class="even">
+<td align="center">TPB.ON</td>
+<td align="center">I_WIS</td>
+<td align="center">0.457</td>
+<td align="center">0.148</td>
+<td align="center">3.084</td>
+<td align="center">0.002</td>
+<td align="center">Between</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>The standardized confidence intervals of M5 were</li>
+</ul>
+<pre class="r"><code>pander::pander(MIMIC_conf_di_man_results$parameters$ci.stdyx.standardized %&gt;% 
+                 filter(grepl(&quot;ON&quot;, paramHeader), !grepl(&quot;I_EXP&quot;, param), !grepl(&quot;I_WIS&quot;, param)) %&gt;% 
+                 select(-low.5, -low5, -up.5, -up5))</code></pre>
+<table style="width:88%;">
+<colgroup>
+<col width="19%"></col>
+<col width="13%"></col>
+<col width="12%"></col>
+<col width="9%"></col>
+<col width="11%"></col>
+<col width="20%"></col>
+</colgroup>
+<thead>
+<tr class="header">
+<th align="center">paramHeader</th>
+<th align="center">param</th>
+<th align="center">low2.5</th>
+<th align="center">est</th>
+<th align="center">up2.5</th>
+<th align="center">BetweenWithin</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="center">TPW.ON</td>
+<td align="center">TR_PC</td>
+<td align="center">-0.277</td>
+<td align="center">-0.216</td>
+<td align="center">-0.155</td>
+<td align="center">Within</td>
+</tr>
+<tr class="even">
+<td align="center">TPW.ON</td>
+<td align="center">KE_01_PC</td>
+<td align="center">0.007</td>
+<td align="center">0.071</td>
+<td align="center">0.135</td>
+<td align="center">Within</td>
+</tr>
+<tr class="odd">
+<td align="center">TPW.ON</td>
+<td align="center">KO_PC</td>
+<td align="center">0.381</td>
+<td align="center">0.441</td>
+<td align="center">0.502</td>
+<td align="center">Within</td>
+</tr>
+<tr class="even">
+<td align="center">TPB.ON</td>
+<td align="center">DI_GC</td>
+<td align="center">-0.276</td>
+<td align="center">-0.066</td>
+<td align="center">0.145</td>
+<td align="center">Between</td>
+</tr>
+<tr class="odd">
+<td align="center">TPB.ON</td>
+<td align="center">DI_GC_EXP</td>
+<td align="center">-0.066</td>
+<td align="center">0.112</td>
+<td align="center">0.291</td>
+<td align="center">Between</td>
+</tr>
+<tr class="even">
+<td align="center">TPB.ON</td>
+<td align="center">DI_GC_WIS</td>
+<td align="center">-0.036</td>
+<td align="center">0.116</td>
+<td align="center">0.267</td>
+<td align="center">Between</td>
+</tr>
+<tr class="odd">
+<td align="center">TPB.ON</td>
+<td align="center">ME_NP</td>
+<td align="center">-0.543</td>
+<td align="center">-0.397</td>
+<td align="center">-0.25</td>
+<td align="center">Between</td>
+</tr>
+<tr class="even">
+<td align="center">TPB.ON</td>
+<td align="center">MI_NP</td>
+<td align="center">-0.172</td>
+<td align="center">-0.027</td>
+<td align="center">0.117</td>
+<td align="center">Between</td>
+</tr>
+<tr class="odd">
+<td align="center">TPB.ON</td>
+<td align="center">MB_NP</td>
+<td align="center">-0.274</td>
+<td align="center">-0.126</td>
+<td align="center">0.021</td>
+<td align="center">Between</td>
+</tr>
+</tbody>
+</table>
+<pre class="r"><code>pander::pander(MIMIC_conf_di_man_results$parameters$ci.stdy.standardized %&gt;% 
+                 filter(grepl(&quot;ON&quot;, paramHeader), grepl(&quot;I_EXP&quot;, param) | grepl(&quot;I_WIS&quot;, param)) %&gt;% 
+                 dplyr::select(-low.5, -low5, -up.5, -up5))</code></pre>
+<table style="width:83%;">
+<colgroup>
+<col width="19%"></col>
+<col width="11%"></col>
+<col width="12%"></col>
+<col width="8%"></col>
+<col width="11%"></col>
+<col width="20%"></col>
+</colgroup>
+<thead>
+<tr class="header">
+<th align="center">paramHeader</th>
+<th align="center">param</th>
+<th align="center">low2.5</th>
+<th align="center">est</th>
+<th align="center">up2.5</th>
+<th align="center">BetweenWithin</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="center">TPB.ON</td>
+<td align="center">I_EXP</td>
+<td align="center">-0.176</td>
+<td align="center">0.107</td>
+<td align="center">0.391</td>
+<td align="center">Between</td>
+</tr>
+<tr class="even">
+<td align="center">TPB.ON</td>
+<td align="center">I_WIS</td>
+<td align="center">0.166</td>
+<td align="center">0.457</td>
+<td align="center">0.747</td>
+<td align="center">Between</td>
+</tr>
+</tbody>
+</table>
 </div>
-<div id="m8-confounders-of-predictive-effects-ebi-h3" class="section level3">
-<h3>M8: Confounders of Predictive Effects EBI (H3)</h3>
+<div id="m6-confounders-of-predictive-effects-ebi-h3" class="section level3">
+<h3>M6: Confounders of Predictive Effects EBI (H3)</h3>
 <pre class="r"><code>### MIMIC_conf_ebi_man Modell  _____________________________________________________________________
 
 MIMIC_conf_ebi_man &lt;- mplusObject(
@@ -1472,18 +1865,19 @@ MIMIC_conf_ebi_man &lt;- mplusObject(
                  TPB ON abs_gc rel_gc abs_gc_exp rel_gc_exp abs_gc_wis rel_gc_wis
                         I_exp I_wis me_np mi_np mb_np;&quot;,
    
-   OUTPUT = &quot;Standardized MODINDICES(5);&quot;,
+   OUTPUT = &quot;Standardized CINTERVAL MODINDICES(5);&quot;,
    
    rdata = rawdata_long_np)
 
 MIMIC_conf_ebi_man_fit &lt;- mplusModeler(MIMIC_conf_ebi_man, &quot;MIMIC_conf_ebi_man.dat&quot;, run = 1)</code></pre>
 <ul>
-<li>The fitindices of M8 were: χ² = 181.307, <em>df</em> = 89, CFI = 0.96, TLI = 0.948, RMSEA = 0.027, SRMR<sub>within</sub> = 0.026, SRMR<sub>between</sub> = 0.047</li>
-<li>The standardized predictive effects of M8 were:</li>
+<li>The fitindices of M6 were: χ² = 181.307, <em>df</em> = 89, CFI = 0.96, TLI = 0.948, RMSEA = 0.027, SRMR<sub>within</sub> = 0.026, SRMR<sub>between</sub> = 0.047</li>
+<li>The standardized predictive effects of M6 were:</li>
 </ul>
 <pre class="r"><code>MIMIC_conf_ebi_man_results &lt;- readModels(&quot;MIMIC_conf_ebi_man.out&quot;)</code></pre>
 <p>Reading model: MIMIC_conf_ebi_man.out</p>
-<pre class="r"><code>pander::pander(MIMIC_conf_ebi_man_results$parameters$stdyx.standardized%&gt;% filter(grepl(&quot;ON&quot;, paramHeader)))</code></pre>
+<pre class="r"><code>pander::pander(MIMIC_conf_ebi_man_results$parameters$stdyx.standardized %&gt;% 
+                 filter(grepl(&quot;ON&quot;, paramHeader), !grepl(&quot;I_EXP&quot;, param), !grepl(&quot;I_WIS&quot;, param)))</code></pre>
 <table style="width:96%;">
 <colgroup>
 <col width="19%"></col>
@@ -1589,24 +1983,6 @@ MIMIC_conf_ebi_man_fit &lt;- mplusModeler(MIMIC_conf_ebi_man, &quot;MIMIC_conf_e
 </tr>
 <tr class="even">
 <td align="center">TPB.ON</td>
-<td align="center">I_EXP</td>
-<td align="center">0.06</td>
-<td align="center">0.068</td>
-<td align="center">0.891</td>
-<td align="center">0.373</td>
-<td align="center">Between</td>
-</tr>
-<tr class="odd">
-<td align="center">TPB.ON</td>
-<td align="center">I_WIS</td>
-<td align="center">0.206</td>
-<td align="center">0.072</td>
-<td align="center">2.869</td>
-<td align="center">0.004</td>
-<td align="center">Between</td>
-</tr>
-<tr class="even">
-<td align="center">TPB.ON</td>
 <td align="center">ME_NP</td>
 <td align="center">-0.403</td>
 <td align="center">0.069</td>
@@ -1630,6 +2006,215 @@ MIMIC_conf_ebi_man_fit &lt;- mplusModeler(MIMIC_conf_ebi_man, &quot;MIMIC_conf_e
 <td align="center">0.073</td>
 <td align="center">-1.265</td>
 <td align="center">0.206</td>
+<td align="center">Between</td>
+</tr>
+</tbody>
+</table>
+<pre class="r"><code>pander::pander(MIMIC_conf_ebi_man_results$parameters$stdy.standardized %&gt;% 
+                 filter(grepl(&quot;ON&quot;, paramHeader), grepl(&quot;I_EXP&quot;, param) | grepl(&quot;I_WIS&quot;, param)))</code></pre>
+<table style="width:90%;">
+<colgroup>
+<col width="19%"></col>
+<col width="11%"></col>
+<col width="8%"></col>
+<col width="8%"></col>
+<col width="12%"></col>
+<col width="9%"></col>
+<col width="20%"></col>
+</colgroup>
+<thead>
+<tr class="header">
+<th align="center">paramHeader</th>
+<th align="center">param</th>
+<th align="center">est</th>
+<th align="center">se</th>
+<th align="center">est_se</th>
+<th align="center">pval</th>
+<th align="center">BetweenWithin</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="center">TPB.ON</td>
+<td align="center">I_EXP</td>
+<td align="center">0.129</td>
+<td align="center">0.144</td>
+<td align="center">0.892</td>
+<td align="center">0.373</td>
+<td align="center">Between</td>
+</tr>
+<tr class="even">
+<td align="center">TPB.ON</td>
+<td align="center">I_WIS</td>
+<td align="center">0.434</td>
+<td align="center">0.151</td>
+<td align="center">2.884</td>
+<td align="center">0.004</td>
+<td align="center">Between</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>The standardized confidence intervals of M5 were</li>
+</ul>
+<pre class="r"><code>pander::pander(MIMIC_conf_ebi_man_results$parameters$ci.stdyx.standardized %&gt;% 
+                 filter(grepl(&quot;ON&quot;, paramHeader), !grepl(&quot;I_EXP&quot;, param), !grepl(&quot;I_WIS&quot;, param)) %&gt;% 
+                 select(-low.5, -low5, -up.5, -up5))</code></pre>
+<table style="width:89%;">
+<colgroup>
+<col width="19%"></col>
+<col width="15%"></col>
+<col width="12%"></col>
+<col width="9%"></col>
+<col width="11%"></col>
+<col width="20%"></col>
+</colgroup>
+<thead>
+<tr class="header">
+<th align="center">paramHeader</th>
+<th align="center">param</th>
+<th align="center">low2.5</th>
+<th align="center">est</th>
+<th align="center">up2.5</th>
+<th align="center">BetweenWithin</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="center">TPW.ON</td>
+<td align="center">TR_PC</td>
+<td align="center">-0.267</td>
+<td align="center">-0.206</td>
+<td align="center">-0.145</td>
+<td align="center">Within</td>
+</tr>
+<tr class="even">
+<td align="center">TPW.ON</td>
+<td align="center">KE_01_PC</td>
+<td align="center">0.009</td>
+<td align="center">0.073</td>
+<td align="center">0.137</td>
+<td align="center">Within</td>
+</tr>
+<tr class="odd">
+<td align="center">TPW.ON</td>
+<td align="center">KO_PC</td>
+<td align="center">0.389</td>
+<td align="center">0.449</td>
+<td align="center">0.509</td>
+<td align="center">Within</td>
+</tr>
+<tr class="even">
+<td align="center">TPB.ON</td>
+<td align="center">ABS_GC</td>
+<td align="center">0.179</td>
+<td align="center">0.38</td>
+<td align="center">0.58</td>
+<td align="center">Between</td>
+</tr>
+<tr class="odd">
+<td align="center">TPB.ON</td>
+<td align="center">REL_GC</td>
+<td align="center">-0.027</td>
+<td align="center">0.153</td>
+<td align="center">0.333</td>
+<td align="center">Between</td>
+</tr>
+<tr class="even">
+<td align="center">TPB.ON</td>
+<td align="center">ABS_GC_EXP</td>
+<td align="center">-0.3</td>
+<td align="center">-0.138</td>
+<td align="center">0.023</td>
+<td align="center">Between</td>
+</tr>
+<tr class="odd">
+<td align="center">TPB.ON</td>
+<td align="center">REL_GC_EXP</td>
+<td align="center">-0.115</td>
+<td align="center">0.04</td>
+<td align="center">0.195</td>
+<td align="center">Between</td>
+</tr>
+<tr class="even">
+<td align="center">TPB.ON</td>
+<td align="center">ABS_GC_WIS</td>
+<td align="center">-0.357</td>
+<td align="center">-0.188</td>
+<td align="center">-0.018</td>
+<td align="center">Between</td>
+</tr>
+<tr class="odd">
+<td align="center">TPB.ON</td>
+<td align="center">REL_GC_WIS</td>
+<td align="center">-0.205</td>
+<td align="center">-0.062</td>
+<td align="center">0.082</td>
+<td align="center">Between</td>
+</tr>
+<tr class="even">
+<td align="center">TPB.ON</td>
+<td align="center">ME_NP</td>
+<td align="center">-0.538</td>
+<td align="center">-0.403</td>
+<td align="center">-0.267</td>
+<td align="center">Between</td>
+</tr>
+<tr class="odd">
+<td align="center">TPB.ON</td>
+<td align="center">MI_NP</td>
+<td align="center">-0.195</td>
+<td align="center">-0.054</td>
+<td align="center">0.087</td>
+<td align="center">Between</td>
+</tr>
+<tr class="even">
+<td align="center">TPB.ON</td>
+<td align="center">MB_NP</td>
+<td align="center">-0.235</td>
+<td align="center">-0.092</td>
+<td align="center">0.051</td>
+<td align="center">Between</td>
+</tr>
+</tbody>
+</table>
+<pre class="r"><code>pander::pander(MIMIC_conf_ebi_man_results$parameters$ci.stdy.standardized %&gt;% 
+                 filter(grepl(&quot;ON&quot;, paramHeader), grepl(&quot;I_EXP&quot;, param) | grepl(&quot;I_WIS&quot;, param)) %&gt;% 
+                 dplyr::select(-low.5, -low5, -up.5, -up5))</code></pre>
+<table style="width:83%;">
+<colgroup>
+<col width="19%"></col>
+<col width="11%"></col>
+<col width="12%"></col>
+<col width="8%"></col>
+<col width="11%"></col>
+<col width="20%"></col>
+</colgroup>
+<thead>
+<tr class="header">
+<th align="center">paramHeader</th>
+<th align="center">param</th>
+<th align="center">low2.5</th>
+<th align="center">est</th>
+<th align="center">up2.5</th>
+<th align="center">BetweenWithin</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="center">TPB.ON</td>
+<td align="center">I_EXP</td>
+<td align="center">-0.154</td>
+<td align="center">0.129</td>
+<td align="center">0.411</td>
+<td align="center">Between</td>
+</tr>
+<tr class="even">
+<td align="center">TPB.ON</td>
+<td align="center">I_WIS</td>
+<td align="center">0.139</td>
+<td align="center">0.434</td>
+<td align="center">0.73</td>
 <td align="center">Between</td>
 </tr>
 </tbody>

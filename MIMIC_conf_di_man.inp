@@ -28,4 +28,4 @@ MODEL:
                  tp_05_np@0;
                  TPB ON di_gc di_gc_exp di_gc_wis I_exp I_wis me_np mi_np mb_np; 
 OUTPUT:
-Standardized MODINDICES(5);
+Standardized CINTERVAL MODINDICES(5);

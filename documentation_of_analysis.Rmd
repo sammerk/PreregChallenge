@@ -554,7 +554,7 @@ This sections provides the code and output of the analyses we conducted to inves
 
 ## Predictive Effects of Source (H1)
 
-### M3: Multi-Group MCFA Model
+### M1: Multi-Group MCFA Model
 ```{r MGMCFA_strong_invariance, cache = T, eval = T, results = 'hide', warning = F, message = F}
 
 ### MGMCFA Modell _____________________________________________________________________
@@ -585,10 +585,10 @@ MGMCFA_tp_strong <- mplusObject(
 MGMCFA_tp_strong_fit <- mplusModeler(MGMCFA_tp_strong, "MGMCFA_tp_strong.dat", run = 1)
 ```
 
-* The fitindices of M3 were: `r fpf_mp("MGMCFA_tp_strong.out")`
+* The fitindices of M1 were: `r fpf_mp("MGMCFA_tp_strong.out")`
 
 
-### M4: MIMIC Model with source indicator variables as predictors
+### M2: MIMIC Model with source indicator variables as predictors
 ```{r MIMIC_pred_source, cache = T, eval=T, warning = F, message = F, results = 'hide'}
 
 # Dummyvariables for MIMIC Model 
@@ -619,20 +619,28 @@ MIMIC_pred_source <- mplusObject(
                  tp_06_np@0;
                  TPB ON I_exp I_wis;",
    
-   OUTPUT = "Standardized MODINDICES(5);",
+   OUTPUT = "Standardized CINTERVAL MODINDICES(5);",
    
    rdata = rawdata_long_np)
 
 MIMIC_pred_source_fit <- mplusModeler(MIMIC_pred_source, "MIMIC_pred_source.dat", run = 1)
 ```
 
-* The fitindices of M4 were: `r fpf_mp("MIMIC_pred_source.out")`
+* The fitindices of M2 were: `r fpf_mp("MIMIC_pred_source.out")`
+* The standardized (stdy) predictive effects of M2 were:
+```{r results="asis", cache = F}
+MIMIC_pred_source_results <- readModels("MIMIC_pred_source.out")
+pander::pander(MIMIC_pred_source_results$parameters$stdy.standardized%>% filter(grepl("ON", paramHeader)))
+pander::pander(MIMIC_pred_source_results$parameters$ci.stdy.standardized %>% 
+                 filter(grepl("ON", paramHeader)) %>% 
+                 dplyr::select(-low.5, -low2.5, -up.5, -up2.5))
+```
 
 
 ## Predictive Effects of epistemic beliefs (H2)
 
-### M5: Predictive Effects of D-Index
-```{r MGMLSEM_pred_di_man, cache = T, eval=T, results = 'hide', warning = F, message = F}
+### M3: Predictive Effects of D-Index
+```{r MLSEM_pred_di_man, cache = T, eval=T, results = 'hide', warning = F, message = F}
 
 rawdata_long_np <-
   rawdata_long_np%>%
@@ -673,23 +681,37 @@ MIMIC_pred_di_man <- mplusObject(
                  tp_05_np@0;
                  TPB ON di_gc di_gc_exp di_gc_wis I_exp I_wis;",
    
-   OUTPUT = "Standardized MODINDICES(5);",
+   OUTPUT = "Standardized CINTERVAL MODINDICES(5);",
    
    rdata = rawdata_long_np)
 
 MIMIC_pred_di_man_fit <- mplusModeler(MIMIC_pred_di_man, "MIMIC_pred_di_man.dat", run = 1)
 ```
 
-* The fitindices of M5 were: `r fpf_mp("MIMIC_pred_di_man.out")`
-* The standardized predictive effects of M5 were:
-```{r results="asis", cache = F}
+* The fitindices of M3 were: `r fpf_mp("MIMIC_pred_di_man.out")`
+* The standardized predictive effects of M3 were:
+```{r, results="asis", cache = F}
 MIMIC_pred_di_man_results <- readModels("MIMIC_pred_di_man.out")
-pander::pander(MIMIC_pred_di_man_results$parameters$stdyx.standardized%>% filter(grepl("ON", paramHeader)))
+pander::pander(MIMIC_pred_di_man_results$parameters$stdyx.standardized %>% 
+                 filter(grepl("ON", paramHeader), !grepl("I_EXP", param), !grepl("I_WIS", param)))
+pander::pander(MIMIC_pred_di_man_results$parameters$stdy.standardized %>% 
+                 filter(grepl("ON", paramHeader), grepl("I_EXP", param) | grepl("I_WIS", param)))
+```
+  
+* The standardized confidence intervals of M3 were  
+```{r, results="asis"}
+pander::pander(MIMIC_pred_di_man_results$parameters$ci.stdyx.standardized %>% 
+                 filter(grepl("ON", paramHeader), !grepl("I_EXP", param), !grepl("I_WIS", param)) %>% 
+                 select(-low.5, -low5, -up.5, -up5))
+                 
+pander::pander(MIMIC_pred_di_man_results$parameters$ci.stdy.standardized %>% 
+                 filter(grepl("ON", paramHeader), grepl("I_EXP", param) | grepl("I_WIS", param)) %>% 
+                 dplyr::select(-low.5, -low5, -up.5, -up5))
 ```
 
 
 
-### M6: Predictive Effects of EBI
+### M4: Predictive Effects of EBI
 ```{r MIMIC_pred_ebi_man, cache = T, eval=T, results = 'hide', warning = F, message = F}
 
 rawdata_long_np <-
@@ -739,18 +761,33 @@ MIMIC_pred_ebi_man <- mplusObject(
    
    
    ",
-   OUTPUT = "Standardized MODINDICES(5);",
+   OUTPUT = "Standardized CINTERVAL MODINDICES(5);",
    rdata = rawdata_long_np)
 
 MIMIC_pred_ebi_man_fit <- mplusModeler(MIMIC_pred_ebi_man, "MIMIC_pred_ebi_man.dat", run = 1)
 ```
 
-* The fitindices of M6 were: `r fpf_mp("MIMIC_pred_ebi_man.out")`
-* The standardized predictive effects of M6 were:
+* The fitindices of M4 were: `r fpf_mp("MIMIC_pred_ebi_man.out")`
+* The standardized predictive effects of M4 were:
 ```{r results="asis", cache = F}
 MIMIC_pred_ebi_man_results <- readModels("MIMIC_pred_ebi_man.out")
-pander::pander(MIMIC_pred_ebi_man_results$parameters$stdyx.standardized%>% filter(grepl("ON", paramHeader)))
+pander::pander(MIMIC_pred_ebi_man_results$parameters$stdyx.standardized %>% 
+                 filter(grepl("ON", paramHeader), !grepl("I_EXP", param), !grepl("I_WIS", param)))
+pander::pander(MIMIC_pred_ebi_man_results$parameters$stdy.standardized %>% 
+                 filter(grepl("ON", paramHeader), grepl("I_EXP", param) | grepl("I_WIS", param)))
 ```
+  
+* The standardized confidence intervals of M4 were  
+```{r, results="asis"}
+pander::pander(MIMIC_pred_ebi_man_results$parameters$ci.stdyx.standardized %>% 
+                 filter(grepl("ON", paramHeader), !grepl("I_EXP", param), !grepl("I_WIS", param)) %>% 
+                 select(-low.5, -low5, -up.5, -up5))
+                 
+pander::pander(MIMIC_pred_ebi_man_results$parameters$ci.stdy.standardized %>% 
+                 filter(grepl("ON", paramHeader), grepl("I_EXP", param) | grepl("I_WIS", param)) %>% 
+                 dplyr::select(-low.5, -low5, -up.5, -up5))
+```
+
 
 
 
@@ -758,7 +795,7 @@ pander::pander(MIMIC_pred_ebi_man_results$parameters$stdyx.standardized%>% filte
 
 ## Confounders of Predictive Effects of epistemic beliefs
 
-### M7: Confounders of Predictive Effects D-Index (H3)
+### M5: Confounders of Predictive Effects D-Index (H3)
 
 ```{r MIMIC_conf_di_man, cache = T, eval = T, results = 'hide', warning = F, message = F}
 
@@ -804,22 +841,37 @@ MIMIC_conf_di_man <- mplusObject(
                  tp_05_np@0;
                  TPB ON di_gc di_gc_exp di_gc_wis I_exp I_wis me_np mi_np mb_np; ",
    
-   OUTPUT = "Standardized MODINDICES(5);",
+   OUTPUT = "Standardized CINTERVAL MODINDICES(5);",
    
    rdata = rawdata_long_np)
 
 MIMIC_conf_di_man_fit <- mplusModeler(MIMIC_conf_di_man, "MIMIC_conf_di_man.dat", run = 1)
 ```
 
-* The fitindices of M7 were: `r fpf_mp("MIMIC_conf_di_man.out")`
-* The standardized predictive effects of M7 were:
+* The fitindices of M5 were: `r fpf_mp("MIMIC_conf_di_man.out")`
+* The standardized predictive effects of M5 were:
 ```{r results="asis", cache = F}
 MIMIC_conf_di_man_results <- readModels("MIMIC_conf_di_man.out")
-pander::pander(MIMIC_conf_di_man_results$parameters$stdyx.standardized%>% filter(grepl("ON", paramHeader)))
+pander::pander(MIMIC_conf_di_man_results$parameters$stdyx.standardized %>% 
+                 filter(grepl("ON", paramHeader), !grepl("I_EXP", param), !grepl("I_WIS", param)))
+pander::pander(MIMIC_conf_di_man_results$parameters$stdy.standardized %>% 
+                 filter(grepl("ON", paramHeader), grepl("I_EXP", param) | grepl("I_WIS", param)))
+```
+  
+* The standardized confidence intervals of M5 were  
+```{r, results="asis"}
+pander::pander(MIMIC_conf_di_man_results$parameters$ci.stdyx.standardized %>% 
+                 filter(grepl("ON", paramHeader), !grepl("I_EXP", param), !grepl("I_WIS", param)) %>% 
+                 select(-low.5, -low5, -up.5, -up5))
+                 
+pander::pander(MIMIC_conf_di_man_results$parameters$ci.stdy.standardized %>% 
+                 filter(grepl("ON", paramHeader), grepl("I_EXP", param) | grepl("I_WIS", param)) %>% 
+                 dplyr::select(-low.5, -low5, -up.5, -up5))
 ```
 
 
-### M8: Confounders of Predictive Effects EBI (H3)
+
+### M6: Confounders of Predictive Effects EBI (H3)
 
 ```{r MGPATH_conf_eb_ebi, cache = T, eval = T, results = 'hide', warning = F, message = F}
 
@@ -854,19 +906,34 @@ MIMIC_conf_ebi_man <- mplusObject(
                  TPB ON abs_gc rel_gc abs_gc_exp rel_gc_exp abs_gc_wis rel_gc_wis
                         I_exp I_wis me_np mi_np mb_np;",
    
-   OUTPUT = "Standardized MODINDICES(5);",
+   OUTPUT = "Standardized CINTERVAL MODINDICES(5);",
    
    rdata = rawdata_long_np)
 
 MIMIC_conf_ebi_man_fit <- mplusModeler(MIMIC_conf_ebi_man, "MIMIC_conf_ebi_man.dat", run = 1)
 ```
 
-* The fitindices of M8 were: `r fpf_mp("MIMIC_conf_ebi_man.out")`
-* The standardized predictive effects of M8 were:
+* The fitindices of M6 were: `r fpf_mp("MIMIC_conf_ebi_man.out")`
+* The standardized predictive effects of M6 were:
 ```{r results="asis", cache = F}
 MIMIC_conf_ebi_man_results <- readModels("MIMIC_conf_ebi_man.out")
-pander::pander(MIMIC_conf_ebi_man_results$parameters$stdyx.standardized%>% filter(grepl("ON", paramHeader)))
+pander::pander(MIMIC_conf_ebi_man_results$parameters$stdyx.standardized %>% 
+                 filter(grepl("ON", paramHeader), !grepl("I_EXP", param), !grepl("I_WIS", param)))
+pander::pander(MIMIC_conf_ebi_man_results$parameters$stdy.standardized %>% 
+                 filter(grepl("ON", paramHeader), grepl("I_EXP", param) | grepl("I_WIS", param)))
 ```
+  
+* The standardized confidence intervals of M5 were  
+```{r, results="asis"}
+pander::pander(MIMIC_conf_ebi_man_results$parameters$ci.stdyx.standardized %>% 
+                 filter(grepl("ON", paramHeader), !grepl("I_EXP", param), !grepl("I_WIS", param)) %>% 
+                 select(-low.5, -low5, -up.5, -up5))
+                 
+pander::pander(MIMIC_conf_ebi_man_results$parameters$ci.stdy.standardized %>% 
+                 filter(grepl("ON", paramHeader), grepl("I_EXP", param) | grepl("I_WIS", param)) %>% 
+                 dplyr::select(-low.5, -low5, -up.5, -up5))
+```
+
 
 
 # Literature

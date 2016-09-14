@@ -22,4 +22,4 @@ MODEL:
                  tp_06_np@0;
                  TPB ON I_exp I_wis;
 OUTPUT:
-Standardized MODINDICES(5);
+Standardized CINTERVAL MODINDICES(5);
