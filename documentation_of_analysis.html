@@ -464,7 +464,7 @@ rpf_wv &lt;- function(x){
                       
   
   return(sprintf(
-          &quot;%s &lt; ω &lt; %s (union of 95%%CI[%s, %s])&quot;,
+          &quot;%s &lt; ω &lt; %s (union of 95%% CI [%s, %s])&quot;,
           round(min(reldat$alpha.est), 2),
           round(max(reldat$alpha.est), 2),
           round(min(reldat$alpha.ci.lower), 2),
@@ -502,7 +502,7 @@ rpf_bv &lt;- function(x){
                       
   
   return(sprintf(
-            &quot;ω = %s, 95%%CI[%s, %s])&quot;,
+            &quot;ω = %s, 95%% CI [%s, %s])&quot;,
             round(relinfo$est, 2),
             round(relinfo$ci.lower, 2),
             round(relinfo$ci.upper, 2)
@@ -544,7 +544,7 @@ MCFA_tp_unres_fit &lt;- mplusModeler(MCFA_tp_unres, &quot;MCFA_tp_unres.dat&quot
 </div>
 <div id="reliability-estimates" class="section level3">
 <h3>Reliability estimates:</h3>
-<p>0.74 &lt; ω &lt; 0.78 (union of 95%CI[0.7, 0.81])</p>
+<p>0.74 &lt; ω &lt; 0.78 (union of 95% CI [0.7, 0.81])</p>
 </div>
 </div>
 <div id="theory-specific-relativism" class="section level2">
@@ -579,7 +579,7 @@ MCFA_tr_unres_fit &lt;- mplusModeler(MCFA_tr_unres, &quot;MCFA_tr_unres.dat&quot
 </div>
 <div id="reliability-estimates-1" class="section level3">
 <h3>Reliability estimates:</h3>
-<p>0.68 &lt; ω &lt; 0.75 (union of 95%CI[0.62, 0.79])</p>
+<p>0.68 &lt; ω &lt; 0.75 (union of 95% CI [0.62, 0.79])</p>
 </div>
 </div>
 <div id="koherence-with-the-topic" class="section level2">
@@ -650,7 +650,7 @@ di.cfa.fitted &lt;- cfa(di.cfa.model, data = rawdata_np)</code></pre>
 </div>
 <div id="reliability-estimates-3" class="section level3">
 <h3>Reliability estimates:</h3>
-<p>ω = 0.75, 95%CI[0.71, 0.79])</p>
+<p>ω = 0.75, 95% CI [0.71, 0.79])</p>
 </div>
 </div>
 <div id="epistemic-beliefs-inventory" class="section level2">
@@ -679,8 +679,8 @@ ebi.cfa.fitted &lt;- cfa(ebi.cfa.model, data = rawdata)</code></pre>
 <div id="reliability-estimates-4" class="section level3">
 <h3>Reliability estimates:</h3>
 <ul>
-<li>Absolutism: ω = 0.73, 95%CI[0.69, 0.77])</li>
-<li>Relativism: ω = 0.74, 95%CI[0.7, 0.78])</li>
+<li>Absolutism: ω = 0.73, 95% CI [0.69, 0.77])</li>
+<li>Relativism: ω = 0.74, 95 % CI[0.7, 0.78])</li>
 </ul>
 </div>
 </div>
@@ -706,8 +706,8 @@ caeb.cfa.fitted &lt;- cfa(caeb.cfa.model, data = rawdata_np)</code></pre>
 <div id="reliability-estimates-5" class="section level3">
 <h3>Reliability estimates:</h3>
 <ul>
-<li>Variability: ω = 0.63, 95%CI[0.56, 0.68])</li>
-<li>Texture: ω = 0.8, 95%CI[0.76, 0.83])</li>
+<li>Variability: ω = 0.63, 95% CI [0.56, 0.68])</li>
+<li>Texture: ω = 0.8, 95% CI [0.76, 0.83])</li>
 </ul>
 </div>
 </div>
@@ -730,9 +730,9 @@ meti.cfa.fitted &lt;- cfa(meti.cfa.model, data = rawdata_np)</code></pre>
 <div id="reliability-estimates-6" class="section level3">
 <h3>Reliability estimates:</h3>
 <ul>
-<li>Expertise: ω = 0.88, 95%CI[0.86, 0.9])</li>
-<li>Integrity: ω = 0.84, 95%CI[0.81, 0.87])</li>
-<li>Benevolence: ω = 0.87, 95%CI[0.84, 0.89])</li>
+<li>Expertise: ω = 0.88, 95% CI [0.86, 0.9])</li>
+<li>Integrity: ω = 0.84, 95% CI [0.81, 0.87])</li>
+<li>Benevolence: ω = 0.87, 95% CI [0.84, 0.89])</li>
 </ul>
 </div>
 </div>

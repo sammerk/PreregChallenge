@@ -280,7 +280,7 @@ rpf_wv <- function(x){
                       
   
   return(sprintf(
-          "%s < ω < %s (union of 95%%CI[%s, %s])",
+          "%s < ω < %s (union of 95%% CI [%s, %s])",
           round(min(reldat$alpha.est), 2),
           round(max(reldat$alpha.est), 2),
           round(min(reldat$alpha.ci.lower), 2),
@@ -318,7 +318,7 @@ rpf_bv <- function(x){
                       
   
   return(sprintf(
-            "ω = %s, 95%%CI[%s, %s])",
+            "ω = %s, 95%% CI [%s, %s])",
             round(relinfo$est, 2),
             round(relinfo$ci.lower, 2),
             round(relinfo$ci.upper, 2)
@@ -497,8 +497,8 @@ ebi.cfa.fitted <- cfa(ebi.cfa.model, data = rawdata)
 `r fpf_la(ebi.cfa.fitted)`  
 
 ### Reliability estimates:
-* Absolutism: ω = `r round(MBESS::ci.reliability(data.frame(select(rawdata_np, contains("_a_"))))$est, 2)`, 95%CI[`r round(MBESS::ci.reliability(data.frame(select(rawdata_np, contains("_a_"))))$ci.lower, 2)`, `r round(MBESS::ci.reliability(data.frame(select(rawdata_np, contains("_a_"))))$ci.upper, 2)`])
-* Relativism: ω = `r round(MBESS::ci.reliability(data.frame(select(rawdata_np, contains("_r"))))$est, 2)`, 95%CI[`r round(MBESS::ci.reliability(data.frame(select(rawdata_np, contains("_r_"))))$ci.lower, 2)`, `r round(MBESS::ci.reliability(data.frame(select(rawdata_np, contains("_r_"))))$ci.upper, 2)`])
+* Absolutism: ω = `r round(MBESS::ci.reliability(data.frame(select(rawdata_np, contains("_a_"))))$est, 2)`, 95% CI [`r round(MBESS::ci.reliability(data.frame(select(rawdata_np, contains("_a_"))))$ci.lower, 2)`, `r round(MBESS::ci.reliability(data.frame(select(rawdata_np, contains("_a_"))))$ci.upper, 2)`])
+* Relativism: ω = `r round(MBESS::ci.reliability(data.frame(select(rawdata_np, contains("_r"))))$est, 2)`, 95 % CI[`r round(MBESS::ci.reliability(data.frame(select(rawdata_np, contains("_r_"))))$ci.lower, 2)`, `r round(MBESS::ci.reliability(data.frame(select(rawdata_np, contains("_r_"))))$ci.upper, 2)`])
 
 
 ## Connotative aspect of epistemic beliefs
@@ -551,95 +551,6 @@ meti.cfa.fitted <- cfa(meti.cfa.model, data = rawdata_np)
 
 # Results
 This sections provides the code and output of the analyses we conducted to investigate our hypotheses. Note that the heading the same than in the corresponding article.
-
-## Confirmatory Factor Analysis
-### M1: MCFA with level-variant measurement models
-```{r MCFA_tp_unres2, echo=T, warning=F, message=F, cache = T, eval = T, results = 'hide'}
-
-MCFA_tp_unres <- mplusObject(
-  
-   TITLE =  "MCFA__tp_unres",
-   
-   ANALYSIS =  "TYPE = TWOLEVEL;",
-    
-   VARIABLE =  "USEVARIABLES = tp_01_np tp_02_np tp_03_np tp_04_np 
-                tp_05_np tp_06_np;
-   
-                CLUSTER = IDnum;",
-   
-
-   MODEL =      "%WITHIN%
-                 TPW BY tp_01_np
-   	                    tp_02_np
-   	                    tp_03_np
-   	                    tp_04_np
-                        tp_05_np
-                        tp_06_np;
-           
-   
-                  %BETWEEN%
-                  TPB BY tp_01_np
-   	                     tp_02_np
-   	                     tp_03_np
-   	                     tp_04_np
-                         tp_05_np
-                         tp_06_np;",
-   OUTPUT = "Standardized;",
-   rdata = rawdata_long_np)
-
-MCFA_tp_unres_fit <- mplusModeler(MCFA_tp_unres, "MCFA_tp_unres.dat", run = 1)
-```
-
-* The fitindices of M1 were `r fpf_mp("MCFA_tp_unres.out")`  
-* An estimation of ICC(1)-coeffients resulted in a range of `r round(min(c(psychometric::ICC1.lme(tp_01_np, IDnum, rawdata_long_np), psychometric::ICC1.lme(tp_02_np, IDnum, rawdata_long_np), psychometric::ICC1.lme(tp_03_np, IDnum, rawdata_long_np), psychometric::ICC1.lme(tp_04_np, IDnum, rawdata_long_np))),2)` and `r round(max(c(psychometric::ICC1.lme(tp_01_np, IDnum, rawdata_long_np), psychometric::ICC1.lme(tp_02_np, IDnum, rawdata_long_np), psychometric::ICC1.lme(tp_03_np, IDnum, rawdata_long_np), psychometric::ICC1.lme(tp_04_np, IDnum, rawdata_long_np))),2)`.
-
-### M2:  MCFA with level-invariant measurement models
-
-```{r MCFA_res, echo=T, warning=F, message=F, cache = T, eval = T, results = 'hide'}
-# Mplusmodell
-MCFA_tp_res <- mplusObject(
-  
-   TITLE =  "MCFA_tp_res",
-   
-   ANALYSIS =  "TYPE = TWOLEVEL;",
-    
-   VARIABLE =  "USEVARIABLES = tp_01_np tp_02_np tp_03_np tp_04_np 
-                tp_05_np tp_06_np;
-   
-                CLUSTER = IDnum;",
-   
-
-   MODEL =      "%WITHIN%
-                 TPW BY tp_01_np(01)
-   	                    tp_02_np(02)
-   	                    tp_03_np(03)
-   	                    tp_04_np(04)
-                        tp_05_np(05)
-                        tp_06_np(06);
-           
-   
-                  %BETWEEN%
-                  TPB BY tp_01_np(01)
-   	                     tp_02_np(02)
-   	                     tp_03_np(03)
-   	                     tp_04_np(04)
-                         tp_05_np(05)
-                         tp_06_np(06);",
-   
-   OUTPUT = "Standardized Modindices(5);",
-   
-   rdata = rawdata_long_np)
-
-MCFA_tp_res_fit <- mplusModeler(MCFA_tp_res, "MCFA_tp_res.dat", run = 1)
-```
-
-* The fitindices of M2 were `r fpf_mp("MCFA_tp_res.out")`)
-* A modelcomparison test resulted in:
-```{r MCFA_compare_tp_unres_tp_res, eval=T, echo=T, warning=F, message=F, cache = T}
-compareModels(readModels("MCFA_tp_unres.out"), readModels("MCFA_tp_res.out"), diffTest = T, show = "summaries")
-```
-* The ICC of the latent variable was `r round(0.129/(0.229 + 0.129),2)`
-
 
 ## Predictive Effects of Source (H1)
 
